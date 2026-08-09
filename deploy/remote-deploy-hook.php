@@ -17,6 +17,12 @@
 
 header('Content-Type: text/plain');
 
+// TEMPORAIRE — diagnostic d'une erreur 500 muette (pas d'accès aux logs serveur
+// sans shell sur cet hébergement). À retirer une fois la cause identifiée.
+ini_set('display_errors', '1');
+ini_set('display_startup_errors', '1');
+error_reporting(E_ALL);
+
 if (! class_exists('ZipArchive')) {
     http_response_code(500);
     exit("L'extension PHP zip (ZipArchive) n'est pas activée sur ce serveur. Active-la dans l'espace client OVH (PHP > Extensions) avant de redéployer.\n");
