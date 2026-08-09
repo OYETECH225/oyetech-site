@@ -1,0 +1,147 @@
+name: Deploy
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-test-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2
+        with:
+          php-version: "8.3"
+          extensions: mbstring, pdo, pdo_sqlite, gd, zip, bcmath
+          coverage: none
+
+      - name: Prepare a CI-only .env
+        run: cp .env.example .env
+
+      # Installation complète (avec require-dev) : phpunit n'est disponible que comme ça.
+      - name: Install PHP dependencies (with dev, for testing)
+        run: composer install --optimize-autoloader --no-interaction --prefer-dist
+
+      - name: Generate app key (CI only)
+        run: php artisan key:generate
+
+      - name: Setup Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
+        with:
+          node-version: "20"
+          cache: "npm"
+
+      - name: Install Node dependencies
+        run: npm ci
+
+      - name: Build front-end assets
+        run: npm run build
+
+      - name: Run tests
+        run: php artisan test
+
+      # On réinstalle en mode production juste avant l'envoi : autoloader optimisé,
+      # sans les paquets de dev (phpunit, etc.) qui n'ont rien à faire sur le serveur.
+      - name: Reinstall PHP dependencies (production only)
+        run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
+
+      # /www (dossier public OVH) et /laravel-app (code, non exposé) sont deux
+      # dossiers frères sur le FTP — voir deploy/www.index.php.
+      #
+      # Uploader vendor/ (des dizaines de milliers de petits fichiers) un par un en
+      # SFTP est bien trop lent sur du mutualisé (pas de pipelining, pas de shell
+      # distant pour un rsync réel). On empaquette donc tout en deux archives ZIP,
+      # envoyées en un seul aller-retour réseau chacune, puis extraites côté serveur
+      # par deploy/remote-deploy-hook.php (voir ce fichier).
+      - name: Package deploy archives
+        env:
+          DEPLOY_HOOK_TOKEN: ${{ secrets.DEPLOY_HOOK_TOKEN }}
+        run: |
+          rm -rf .deploy-webroot .deploy-zips .deploy-bootstrap .deploy-bootstrap-app
+          mkdir -p .deploy-webroot .deploy-zips .deploy-bootstrap .deploy-bootstrap-app/deploy
+
+          # Contenu de /www : les assets publics + le bootstrapper personnalisé
+          # + le hook de déploiement (jamais le storage/, qui reste géré côté app).
+          cp -r public/. .deploy-webroot/
+          cp deploy/www.index.php .deploy-webroot/index.php
+          cp deploy/www.deploy-hook.php .deploy-webroot/deploy-hook.php
+          sed -i "s/CHANGE-ME-AT-DEPLOY-TIME/${DEPLOY_HOOK_TOKEN}/" .deploy-webroot/deploy-hook.php
+          rm -rf .deploy-webroot/storage
+
+          (cd .deploy-webroot && zip -r -q ../.deploy-zips/www.zip .)
+
+          # index.php, deploy-hook.php et .htaccess sont aussi envoyés directement
+          # (hors zip) : sans eux déjà en place, impossible d'appeler le hook qui
+          # extrait le zip — ça amorce le tout premier déploiement automatiquement.
+          cp .deploy-webroot/index.php .deploy-webroot/deploy-hook.php .deploy-webroot/.htaccess .deploy-bootstrap/
+
+          # remote-deploy-hook.php est LA logique d'extraction elle-même : si on ne
+          # l'envoyait que dans laravel-app.zip, une version obsolète déjà en place
+          # (qui ne sait pas extraire) ne se mettrait jamais à jour toute seule — elle
+          # continuerait à tourner indéfiniment sans jamais lire le nouveau zip. On
+          # l'envoie donc aussi en direct, hors zip, pour qu'elle soit toujours fraîche.
+          cp deploy/remote-deploy-hook.php .deploy-bootstrap-app/deploy/
+
+          # Contenu de /laravel-app : tout le dépôt, sauf ce qui n'a rien à faire en
+          # prod ou qui appartient au serveur (uploads utilisateurs, .env, caches).
+          zip -r -q .deploy-zips/laravel-app.zip . \
+            -x ".git/*" ".github/*" "node_modules/*" "tests/*" \
+            -x ".env" ".env.*" \
+            -x "storage/app/public/*" "storage/logs/*" \
+            -x "storage/framework/cache/*" "storage/framework/sessions/*" \
+            -x "storage/framework/views/*" "storage/framework/testing/*" \
+            -x ".deploy-webroot/*" ".deploy-zips/*" ".deploy-bootstrap/*" ".deploy-bootstrap-app/*"
+
+          du -h .deploy-zips/*.zip
+
+      - name: Upload deploy archives to /laravel-app
+        uses: wlixcc/SFTP-Deploy-Action@a5ccb9c6211a94cc59404f0fdb2a9936a6dfee64 # v1.2.6
+        with:
+          username: ${{ secrets.OVH_SFTP_USERNAME }}
+          server: ${{ secrets.OVH_SFTP_HOST }}
+          port: ${{ secrets.OVH_SFTP_PORT }}
+          password: ${{ secrets.OVH_SFTP_PASSWORD }}
+          sftp_only: true
+          delete_remote_files: false
+          local_path: "./.deploy-zips/*"
+          remote_path: "laravel-app"
+
+      # Toujours à jour indépendamment du zip (voir commentaire plus haut) — un seul
+      # petit fichier, dans son sous-dossier deploy/ préservé par le put récursif.
+      - name: Upload deploy-hook logic to /laravel-app/deploy
+        uses: wlixcc/SFTP-Deploy-Action@a5ccb9c6211a94cc59404f0fdb2a9936a6dfee64 # v1.2.6
+        with:
+          username: ${{ secrets.OVH_SFTP_USERNAME }}
+          server: ${{ secrets.OVH_SFTP_HOST }}
+          port: ${{ secrets.OVH_SFTP_PORT }}
+          password: ${{ secrets.OVH_SFTP_PASSWORD }}
+          sftp_only: true
+          delete_remote_files: false
+          local_path: "./.deploy-bootstrap-app/*"
+          remote_path: "laravel-app"
+
+      # 3 petits fichiers seulement — rapide, et nécessaire pour que le hook
+      # ci-dessous existe déjà avant qu'on l'appelle (voir commentaire plus haut).
+      - name: Upload bootstrap files to /www
+        uses: wlixcc/SFTP-Deploy-Action@a5ccb9c6211a94cc59404f0fdb2a9936a6dfee64 # v1.2.6
+        with:
+          username: ${{ secrets.OVH_SFTP_USERNAME }}
+          server: ${{ secrets.OVH_SFTP_HOST }}
+          port: ${{ secrets.OVH_SFTP_PORT }}
+          password: ${{ secrets.OVH_SFTP_PASSWORD }}
+          sftp_only: true
+          delete_remote_files: false
+          local_path: "./.deploy-bootstrap/*"
+          remote_path: "www"
+
+      # deploy/remote-deploy-hook.php extrait les deux archives (laravel-app.zip sur
+      # place, www.zip dans ../www) avant de lancer migrations et caches.
+      - name: Extract archives, run migrations & refresh caches on the server
+        env:
+          APP_URL: ${{ secrets.APP_URL }}
+          DEPLOY_HOOK_TOKEN: ${{ secrets.DEPLOY_HOOK_TOKEN }}
+        run: |
+          curl -fsS -H "X-Deploy-Token: ${DEPLOY_HOOK_TOKEN}" "${APP_URL}/deploy-hook.php"
