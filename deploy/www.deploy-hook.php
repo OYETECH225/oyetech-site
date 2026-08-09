@@ -16,4 +16,4 @@ if (! hash_equals($secret, $_SERVER['HTTP_X_DEPLOY_TOKEN'] ?? '')) {
     exit('Not found');
 }
 
-require __DIR__.'/../laravel-app/deploy/remote-deploy-hook.php';
+require __DIR__.'/../oyetech-app/deploy/remote-deploy-hook.php';

@@ -48,7 +48,7 @@ jobs:
       - name: Reinstall PHP dependencies (production only)
         run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
-      # /www (dossier public OVH) et /laravel-app (code, non exposé) sont deux
+      # /www (dossier public OVH) et /oyetech-app (code, non exposé) sont deux
       # dossiers frères sur le FTP — voir deploy/www.index.php.
       #
       # Uploader vendor/ (des dizaines de milliers de petits fichiers) un par un en
@@ -79,15 +79,15 @@ jobs:
           cp .deploy-webroot/index.php .deploy-webroot/deploy-hook.php .deploy-webroot/.htaccess .deploy-bootstrap/
 
           # remote-deploy-hook.php est LA logique d'extraction elle-même : si on ne
-          # l'envoyait que dans laravel-app.zip, une version obsolète déjà en place
+          # l'envoyait que dans oyetech-app.zip, une version obsolète déjà en place
           # (qui ne sait pas extraire) ne se mettrait jamais à jour toute seule — elle
           # continuerait à tourner indéfiniment sans jamais lire le nouveau zip. On
           # l'envoie donc aussi en direct, hors zip, pour qu'elle soit toujours fraîche.
           cp deploy/remote-deploy-hook.php .deploy-bootstrap-app/deploy/
 
-          # Contenu de /laravel-app : tout le dépôt, sauf ce qui n'a rien à faire en
+          # Contenu de /oyetech-app : tout le dépôt, sauf ce qui n'a rien à faire en
           # prod ou qui appartient au serveur (uploads utilisateurs, .env, caches).
-          zip -r -q .deploy-zips/laravel-app.zip . \
+          zip -r -q .deploy-zips/oyetech-app.zip . \
             -x ".git/*" ".github/*" "node_modules/*" "tests/*" \
             -x ".env" ".env.*" \
             -x "storage/app/public/*" "storage/logs/*" \
@@ -97,7 +97,7 @@ jobs:
 
           du -h .deploy-zips/*.zip
 
-      - name: Upload deploy archives to /laravel-app
+      - name: Upload deploy archives to /oyetech-app
         uses: wlixcc/SFTP-Deploy-Action@a5ccb9c6211a94cc59404f0fdb2a9936a6dfee64 # v1.2.6
         with:
           username: ${{ secrets.OVH_SFTP_USERNAME }}
@@ -107,11 +107,11 @@ jobs:
           sftp_only: true
           delete_remote_files: false
           local_path: "./.deploy-zips/*"
-          remote_path: "laravel-app"
+          remote_path: "oyetech-app"
 
       # Toujours à jour indépendamment du zip (voir commentaire plus haut) — un seul
       # petit fichier, dans son sous-dossier deploy/ préservé par le put récursif.
-      - name: Upload deploy-hook logic to /laravel-app/deploy
+      - name: Upload deploy-hook logic to /oyetech-app/deploy
         uses: wlixcc/SFTP-Deploy-Action@a5ccb9c6211a94cc59404f0fdb2a9936a6dfee64 # v1.2.6
         with:
           username: ${{ secrets.OVH_SFTP_USERNAME }}
@@ -121,7 +121,7 @@ jobs:
           sftp_only: true
           delete_remote_files: false
           local_path: "./.deploy-bootstrap-app/*"
-          remote_path: "laravel-app"
+          remote_path: "oyetech-app"
 
       # 3 petits fichiers seulement — rapide, et nécessaire pour que le hook
       # ci-dessous existe déjà avant qu'on l'appelle (voir commentaire plus haut).
@@ -137,7 +137,7 @@ jobs:
           local_path: "./.deploy-bootstrap/*"
           remote_path: "www"
 
-      # deploy/remote-deploy-hook.php extrait les deux archives (laravel-app.zip sur
+      # deploy/remote-deploy-hook.php extrait les deux archives (oyetech-app.zip sur
       # place, www.zip dans ../www) avant de lancer migrations et caches.
       - name: Extract archives, run migrations & refresh caches on the server
         env:

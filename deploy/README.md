@@ -14,22 +14,22 @@ Deux dossiers frères sur l'hébergement :
 
 ```
 www/                    <- racine web du domaine oyetech-ci.com (déjà en place chez OVH)
-laravel-app/             <- code Laravel complet (non exposé publiquement)
+oyetech-app/             <- code Laravel complet (non exposé publiquement)
    deploy/remote-deploy-hook.php
 ```
 
-`www/index.php` est une version modifiée qui charge `laravel-app/vendor/autoload.php`
-et `laravel-app/bootstrap/app.php` au lieu des chemins par défaut (voir
+`www/index.php` est une version modifiée qui charge `oyetech-app/vendor/autoload.php`
+et `oyetech-app/bootstrap/app.php` au lieu des chemins par défaut (voir
 `deploy/www.index.php`). `www/deploy-hook.php` est le déclencheur HTTP protégé
 par token (voir `deploy/www.deploy-hook.php`), qui appelle
-`laravel-app/deploy/remote-deploy-hook.php`.
+`oyetech-app/deploy/remote-deploy-hook.php`.
 
 ## Pourquoi des ZIP plutôt que du SFTP fichier par fichier
 
 `vendor/` contient des dizaines de milliers de petits fichiers ; les envoyer
 un par un en SFTP (pas de pipelining, pas de shell distant pour un vrai
 `rsync`) serait beaucoup trop lent. Le workflow empaquette donc tout en deux
-archives (`laravel-app.zip`, `www.zip`), envoyées chacune en un seul
+archives (`oyetech-app.zip`, `www.zip`), envoyées chacune en un seul
 aller-retour réseau, puis extraites côté serveur par
 `deploy/remote-deploy-hook.php` via `ZipArchive`.
 
@@ -37,9 +37,9 @@ aller-retour réseau, puis extraites côté serveur par
 
 1. GitHub Actions installe les dépendances, build les assets Vite, fait tourner les tests.
 2. Réinstalle les dépendances PHP en mode production (`--no-dev`).
-3. Empaquette `laravel-app.zip` (tout le dépôt, sans `.git`, `node_modules`, `tests`, `.env`, et sans écraser les uploads déjà présents dans `storage/app/public`) et `www.zip` (contenu de `public/` + `index.php` et `deploy-hook.php` adaptés).
+3. Empaquette `oyetech-app.zip` (tout le dépôt, sans `.git`, `node_modules`, `tests`, `.env`, et sans écraser les uploads déjà présents dans `storage/app/public`) et `www.zip` (contenu de `public/` + `index.php` et `deploy-hook.php` adaptés).
 4. Injecte le secret `DEPLOY_HOOK_TOKEN` dans `deploy-hook.php` juste avant l'envoi (jamais committé — le dépôt ne contient qu'un placeholder `CHANGE-ME-AT-DEPLOY-TIME`).
-5. Envoie les deux ZIP dans `laravel-app/`, le hook logique dans `laravel-app/deploy/`, et les 3 fichiers de bootstrap (`index.php`, `deploy-hook.php`, `.htaccess`) directement dans `www/` — ces 3 derniers hors ZIP, pour que le tout premier déploiement puisse s'amorcer tout seul.
+5. Envoie les deux ZIP dans `oyetech-app/`, le hook logique dans `oyetech-app/deploy/`, et les 3 fichiers de bootstrap (`index.php`, `deploy-hook.php`, `.htaccess`) directement dans `www/` — ces 3 derniers hors ZIP, pour que le tout premier déploiement puisse s'amorcer tout seul.
 6. Appelle `https://www.oyetech-ci.com/deploy-hook.php` avec l'en-tête `X-Deploy-Token`, ce qui déclenche côté serveur : extraction des deux ZIP, `migrate --force`, `optimize:clear`, `config:cache`, `route:cache`, `view:cache`.
 
 ## Photos / médias sans `storage:link`
@@ -68,9 +68,9 @@ ce que fait déjà `remote-deploy-hook.php` (voir sa section "Lien storage").
 2. Dans le manager OVH, vérifier que l'extension PHP **zip** est activée (Hébergement > PHP > Extensions) — `remote-deploy-hook.php` en dépend pour extraire les archives.
 3. Vérifier que l'extension **gd** est activée (nécessaire aux conversions d'images Spatie Media Library, ex. webp).
 4. Nettoyer le contenu par défaut actuellement présent dans `www/` (page OVH par défaut) avant le premier push.
-5. Créer le fichier `.env` réel en le déposant manuellement dans `laravel-app/.env` par SFTP (il n'est jamais généré par la CI) — reprendre `.env.example`, renseigner `DB_*`, `MAIL_*`, `APP_KEY` (généré une fois en local avec `php artisan key:generate --show`), `GTM_ID`, `GA4_ID`, `META_PIXEL_ID`, `LINKEDIN_PARTNER_ID`, `CALENDLY_URL`.
+5. Créer le fichier `.env` réel en le déposant manuellement dans `oyetech-app/.env` par SFTP (il n'est jamais généré par la CI) — reprendre `.env.example`, renseigner `DB_*`, `MAIL_*`, `APP_KEY` (généré une fois en local avec `php artisan key:generate --show`), `GTM_ID`, `GA4_ID`, `META_PIXEL_ID`, `LINKEDIN_PARTNER_ID`, `CALENDLY_URL`.
 6. `APP_ENV=production`, `APP_DEBUG=false` dans ce `.env`.
-7. Premier push sur `main` : le workflow crée toute l'arborescence (`laravel-app/`, contenu de `www/`) et lance `migrate --force` — équivalent du `db:seed` à faire une fois manuellement si besoin (pas d'artisan CLI disponible ; possibilité d'ajouter un appel `Artisan::call('db:seed', ['--force' => true])` ponctuel dans le hook, à retirer ensuite).
+7. Premier push sur `main` : le workflow crée toute l'arborescence (`oyetech-app/`, contenu de `www/`) et lance `migrate --force` — équivalent du `db:seed` à faire une fois manuellement si besoin (pas d'artisan CLI disponible ; possibilité d'ajouter un appel `Artisan::call('db:seed', ['--force' => true])` ponctuel dans le hook, à retirer ensuite).
 
 ## Queue & mail
 

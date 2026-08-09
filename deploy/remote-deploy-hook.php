@@ -5,13 +5,13 @@
 // déploiement : extraction des archives, migrations, nettoyage de l'ancien lien
 // storage (voir config/filesystems.php, disque "public"), caches.
 //
-// Ce fichier vit dans laravel-app/deploy/ (non exposé publiquement). Le point
+// Ce fichier vit dans oyetech-app/deploy/ (non exposé publiquement). Le point
 // d'entrée HTTP protégé par token est deploy/www.deploy-hook.php, déployé en tant
 // que www/deploy-hook.php.
 //
 // L'upload SFTP de milliers de petits fichiers vendor/ un par un est bien trop
 // lent sur un hébergement mutualisé (pas de pipelining, pas de shell distant).
-// Le workflow envoie donc deux archives ZIP (laravel-app.zip, www.zip)
+// Le workflow envoie donc deux archives ZIP (oyetech-app.zip, www.zip)
 // qui sont extraites ici, côté serveur, via ZipArchive — un seul aller-retour
 // réseau au lieu de plusieurs milliers.
 
@@ -50,7 +50,7 @@ function extractDeployZip(string $zipPath, string $target, string $label): bool
     return $ok;
 }
 
-$appOk = extractDeployZip(__DIR__.'/../laravel-app.zip', __DIR__.'/..', 'Application (laravel-app)');
+$appOk = extractDeployZip(__DIR__.'/../oyetech-app.zip', __DIR__.'/..', 'Application (oyetech-app)');
 $webrootOk = extractDeployZip(__DIR__.'/../www.zip', __DIR__.'/../../www', 'Dossier public (www)');
 
 // OVH garde parfois en cache l'ancien contenu des fichiers réécrits.
