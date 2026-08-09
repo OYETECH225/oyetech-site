@@ -22,6 +22,27 @@ header('Content-Type: text/plain');
 ini_set('display_errors', '1');
 ini_set('display_startup_errors', '1');
 error_reporting(E_ALL);
+@ini_set('memory_limit', '512M');
+@set_time_limit(120);
+
+register_shutdown_function(function () {
+    $error = error_get_last();
+    if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
+        echo "\n\n=== ERREUR FATALE CAPTURÉE ===\n";
+        echo "Type: {$error['type']}\n";
+        echo "Message: {$error['message']}\n";
+        echo "Fichier: {$error['file']}:{$error['line']}\n";
+    }
+});
+
+function deployStep(string $label): void
+{
+    echo "--- {$label} ---\n";
+    if (function_exists('ob_flush')) {
+        @ob_flush();
+    }
+    @flush();
+}
 
 if (! class_exists('ZipArchive')) {
     http_response_code(500);
@@ -70,14 +91,36 @@ if (! $appOk) {
 }
 
 // 2) Le nouveau code est en place : on démarre Laravel avec le vendor/ à jour.
-require __DIR__.'/../vendor/autoload.php';
-$app = require_once __DIR__.'/../bootstrap/app.php';
-$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
-$kernel->bootstrap();
+deployStep('Avant require vendor/autoload.php');
+
+try {
+    require __DIR__.'/../vendor/autoload.php';
+    deployStep('Après autoload — avant bootstrap/app.php');
+
+    $app = require_once __DIR__.'/../bootstrap/app.php';
+    deployStep('Après bootstrap/app.php — avant kernel->bootstrap()');
+
+    $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+    $kernel->bootstrap();
+    deployStep('Laravel démarré avec succès');
+} catch (\Throwable $e) {
+    echo "\n=== EXCEPTION AU DÉMARRAGE DE LARAVEL ===\n";
+    echo get_class($e).': '.$e->getMessage()."\n";
+    echo $e->getFile().':'.$e->getLine()."\n";
+    echo $e->getTraceAsString()."\n";
+    http_response_code(500);
+    exit;
+}
 
 echo "\n=== Migrations ===\n";
-Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
-echo Illuminate\Support\Facades\Artisan::output();
+try {
+    Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    echo Illuminate\Support\Facades\Artisan::output();
+} catch (\Throwable $e) {
+    echo "=== EXCEPTION PENDANT LES MIGRATIONS ===\n";
+    echo get_class($e).': '.$e->getMessage()."\n";
+    echo $e->getTraceAsString()."\n";
+}
 
 // Apache peut refuser de traverser www/storage (FollowSymLinks non permis via
 // .htaccess sur ce plan OVH). Les fichiers sont servis par la route Laravel
