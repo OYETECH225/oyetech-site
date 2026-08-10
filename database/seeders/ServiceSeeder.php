@@ -47,7 +47,7 @@ class ServiceSeeder extends Seeder
                 'icon' => 'heroicon-o-code-bracket',
                 'summary' => 'Conception de plateformes web, mobiles et automatisations intelligentes sur mesure.',
                 'description' => 'Notre pôle technique conçoit des sites, applications et plateformes robustes, sécurisées et évolutives, taillées pour les besoins spécifiques des entreprises africaines.',
-                'deliverables' => ['Développement web', 'Applications mobiles', 'Plateformes SaaS', 'Intégration API', 'Automatisation IA', 'Fintech'],
+                'deliverables' => ['Développement web', 'Applications mobiles', 'Plateformes SaaS', 'Intégration API', 'Automatisation IA', 'Fintech', 'Installation réseau d\'entreprise'],
                 'order' => 4,
             ],
             [
