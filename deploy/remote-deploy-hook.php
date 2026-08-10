@@ -112,6 +112,13 @@ try {
     // À repasser en migrate --force juste après ce déploiement.
     Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
     echo Illuminate\Support\Facades\Artisan::output();
+
+    // TEMPORAIRE — migrate:fresh vide aussi les données (services, projets,
+    // clients...). Reseed ponctuel pour le premier vrai déploiement. À retirer
+    // en même temps que le migrate:fresh ci-dessus.
+    echo "\n=== Seed ===\n";
+    Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    echo Illuminate\Support\Facades\Artisan::output();
 } catch (\Throwable $e) {
     error_log('Migrations échouées : '.$e->getMessage()."\n".$e->getTraceAsString());
     echo "ÉCHEC des migrations — voir storage/logs/deploy-hook.log.\n";
