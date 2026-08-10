@@ -40,7 +40,10 @@ return [
     ],
 
     'ga4' => [
-        'id' => env('GA4_ID', 'G-DXLMZ7JNBL'),
+        // Fixé en dur : le GA4_ID du .env serveur pointe vers une ancienne
+        // propriété (G-1H392YJRJX) et n'est pas modifiable depuis ce dépôt
+        // (exclu du déploiement CI, voir .github/workflows/deploy.yml).
+        'id' => 'G-DXLMZ7JNBL',
     ],
 
     'meta_pixel' => [
