@@ -27,6 +27,9 @@ function tailFile(string $path, int $lines = 200): string
     return "=== {$path} (dernières ".count($tail)." lignes) ===\n".implode("\n", $tail)."\n";
 }
 
+echo '=== memory_limit effectif : '.ini_get('memory_limit')." ===\n";
+echo '=== max_execution_time effectif : '.ini_get('max_execution_time')." ===\n\n";
+
 echo "=== Contenu de www/ (ce dossier) ===\n";
 foreach (scandir(__DIR__) as $entry) {
     if ($entry === '.' || $entry === '..') {
