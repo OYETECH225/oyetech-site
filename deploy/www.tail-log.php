@@ -27,6 +27,18 @@ function tailFile(string $path, int $lines = 200): string
     return "=== {$path} (dernières ".count($tail)." lignes) ===\n".implode("\n", $tail)."\n";
 }
 
+$envPath = __DIR__.'/../oyetech-app/.env';
+echo "=== Vérification .env (sans exposer de secret) ===\n";
+if (! file_exists($envPath)) {
+    echo "ABSENT : {$envPath}\n";
+} else {
+    $envContent = file_get_contents($envPath);
+    echo 'Présent, taille : '.filesize($envPath)." octets\n";
+    echo 'Contient APP_KEY= non vide : '.(preg_match('/^APP_KEY=base64:.+/m', $envContent) ? 'OUI' : 'NON')."\n";
+    echo 'Contient DB_DATABASE non vide : '.(preg_match('/^DB_DATABASE=.+/m', $envContent) ? 'OUI' : 'NON')."\n";
+}
+echo "\n\n";
+
 echo tailFile(__DIR__.'/../oyetech-app/storage/logs/laravel.log');
 echo "\n\n";
 echo tailFile(__DIR__.'/../oyetech-app/storage/logs/deploy-hook.log');
