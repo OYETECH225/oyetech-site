@@ -40,7 +40,7 @@ return [
     ],
 
     'ga4' => [
-        'id' => env('GA4_ID'),
+        'id' => env('GA4_ID', 'G-DXLMZ7JNBL'),
     ],
 
     'meta_pixel' => [
