@@ -48,6 +48,16 @@ jobs:
       - name: Reinstall PHP dependencies (production only)
         run: composer install --no-dev --optimize-autoloader --no-interaction --prefer-dist
 
+      # livewire.min.js est servi par défaut via une route PHP dynamique (tout le
+      # bootstrap Laravel/Filament à chaque requête) — instable sous charge réelle
+      # sur ce mutualisé (503 intermittents, cassant l'init JS de Livewire côté
+      # client). Publier les assets statiquement fait basculer Livewire dessus
+      # automatiquement (voir FrontendAssets::useFrontendAssets, qui détecte
+      # public/vendor/livewire/manifest.json) : fichier servi par Apache, plus de
+      # PHP dans la boucle pour cet asset.
+      - name: Publish Livewire assets as static files
+        run: php artisan livewire:publish --assets
+
       # /www (dossier public OVH) et /oyetech-app (code, non exposé) sont deux
       # dossiers frères sur le FTP — voir deploy/www.index.php.
       #
