@@ -106,22 +106,26 @@ try {
 
 echo "\n=== Migrations ===\n";
 try {
-    // TEMPORAIRE — la base contenait des tables d'une ancienne installation
-    // (WordPress + une tentative Laravel antérieure dont la table `migrations`
-    // gardait une entrée orpheline). migrate:fresh repart d'une base vide.
-    // À repasser en migrate --force juste après ce déploiement.
-    Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
-    echo Illuminate\Support\Facades\Artisan::output();
-
-    // TEMPORAIRE — migrate:fresh vide aussi les données (services, projets,
-    // clients...). Reseed ponctuel pour le premier vrai déploiement. À retirer
-    // en même temps que le migrate:fresh ci-dessus.
-    echo "\n=== Seed ===\n";
-    Illuminate\Support\Facades\Artisan::call('db:seed', ['--force' => true]);
+    Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     echo Illuminate\Support\Facades\Artisan::output();
 } catch (\Throwable $e) {
     error_log('Migrations échouées : '.$e->getMessage()."\n".$e->getTraceAsString());
     echo "ÉCHEC des migrations — voir storage/logs/deploy-hook.log.\n";
+}
+
+// Nettoyage ponctuel : les endpoints de diagnostic tail-log.php et
+// cleanup-wordpress.php (ajoutés temporairement pour le premier déploiement,
+// sans accès shell) ne sont plus expédiés par la CI depuis leur retrait du
+// dépôt — mais comme le déploiement n'efface jamais les fichiers distants
+// absents du zip, il fallait les retirer explicitement une fois.
+foreach ([
+    __DIR__.'/../../www/tail-log.php',
+    __DIR__.'/../../www/cleanup-wordpress.php',
+] as $obsolete) {
+    if (file_exists($obsolete)) {
+        unlink($obsolete);
+        echo "Fichier de diagnostic obsolète supprimé : {$obsolete}\n";
+    }
 }
 
 // Apache peut refuser de traverser www/storage (FollowSymLinks non permis via
