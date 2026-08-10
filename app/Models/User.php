@@ -21,7 +21,12 @@ class User extends Authenticatable implements FilamentUser
 
     public function canAccessPanel(Panel $panel): bool
     {
-        return true;
+        // Aucune inscription publique n'existe sur ce site (voir routes/web.php) :
+        // les seuls comptes créés le sont manuellement par un admin déjà connecté.
+        // Restriction par domaine tout de même, en défense en profondeur — évite
+        // qu'un compte créé pour un autre usage (ex: futur formulaire) hérite
+        // automatiquement de l'accès au panel.
+        return str_ends_with($this->email, '@oyetech-ci.com');
     }
 
     /**
