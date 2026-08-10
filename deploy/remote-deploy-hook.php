@@ -106,7 +106,11 @@ try {
 
 echo "\n=== Migrations ===\n";
 try {
-    Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+    // TEMPORAIRE — la base contenait des tables d'une ancienne installation
+    // (WordPress + une tentative Laravel antérieure dont la table `migrations`
+    // gardait une entrée orpheline). migrate:fresh repart d'une base vide.
+    // À repasser en migrate --force juste après ce déploiement.
+    Illuminate\Support\Facades\Artisan::call('migrate:fresh', ['--force' => true]);
     echo Illuminate\Support\Facades\Artisan::output();
 } catch (\Throwable $e) {
     error_log('Migrations échouées : '.$e->getMessage()."\n".$e->getTraceAsString());
