@@ -71,14 +71,16 @@ jobs:
           sed -i "s/CHANGE-ME-AT-DEPLOY-TIME/${DEPLOY_HOOK_TOKEN}/" .deploy-webroot/deploy-hook.php
           cp deploy/www.tail-log.php .deploy-webroot/tail-log.php
           sed -i "s/CHANGE-ME-AT-DEPLOY-TIME/${DEPLOY_HOOK_TOKEN}/" .deploy-webroot/tail-log.php
+          cp deploy/www.user.ini .deploy-webroot/.user.ini
           rm -rf .deploy-webroot/storage
 
           (cd .deploy-webroot && zip -r -q ../.deploy-zips/www.zip .)
 
-          # index.php, deploy-hook.php, tail-log.php et .htaccess sont aussi envoyés
-          # directement (hors zip) : sans eux déjà en place, impossible d'appeler le
-          # hook qui extrait le zip — ça amorce le tout premier déploiement automatiquement.
-          cp .deploy-webroot/index.php .deploy-webroot/deploy-hook.php .deploy-webroot/tail-log.php .deploy-webroot/.htaccess .deploy-bootstrap/
+          # index.php, deploy-hook.php, tail-log.php, .user.ini et .htaccess sont
+          # aussi envoyés directement (hors zip) : sans eux déjà en place, impossible
+          # d'appeler le hook qui extrait le zip — ça amorce le tout premier
+          # déploiement automatiquement.
+          cp .deploy-webroot/index.php .deploy-webroot/deploy-hook.php .deploy-webroot/tail-log.php .deploy-webroot/.user.ini .deploy-webroot/.htaccess .deploy-bootstrap/
 
           # remote-deploy-hook.php est LA logique d'extraction elle-même : si on ne
           # l'envoyait que dans oyetech-app.zip, une version obsolète déjà en place
