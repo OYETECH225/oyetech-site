@@ -5,6 +5,18 @@
 
     RewriteEngine On
 
+    # Force HTTPS (couvre aussi le cas où TLS est terminé en amont par OVH,
+    # auquel cas %{HTTPS} peut être "off" côté Apache même si la requête
+    # d'origine est bien en HTTPS — d'où la vérification de X-Forwarded-Proto).
+    RewriteCond %{HTTPS} off
+    RewriteCond %{HTTP:X-Forwarded-Proto} !https
+    RewriteRule ^ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+    # Force le www (canonical unique, évite le contenu dupliqué oyetech-ci.com
+    # vs www.oyetech-ci.com)
+    RewriteCond %{HTTP_HOST} ^oyetech-ci\.com$ [NC]
+    RewriteRule ^ https://www.oyetech-ci.com%{REQUEST_URI} [L,R=301]
+
     # Handle Authorization Header
     RewriteCond %{HTTP:Authorization} .
     RewriteRule .* - [E=HTTP_AUTHORIZATION:%{HTTP:Authorization}]

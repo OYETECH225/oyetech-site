@@ -153,6 +153,10 @@ $exitCodes = [
     'config:cache' => Illuminate\Support\Facades\Artisan::call('config:cache'),
     'route:cache' => Illuminate\Support\Facades\Artisan::call('route:cache'),
     'view:cache' => Illuminate\Support\Facades\Artisan::call('view:cache'),
+    // Régénéré à chaque déploiement avec l'APP_URL réel du serveur — la version
+    // committée dans public/sitemap.xml est générée en local (localhost) et ne
+    // sert qu'à amorcer le premier déploiement.
+    'app:generate-sitemap' => Illuminate\Support\Facades\Artisan::call('app:generate-sitemap'),
 ];
 
 foreach ($exitCodes as $command => $exitCode) {

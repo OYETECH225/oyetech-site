@@ -8,7 +8,9 @@ class SeoService
 {
     public function set(string $title, string $description, ?string $image = null): void
     {
-        SEOTools::setTitle($title);
+        // false : nos titres incluent déjà "— OYETECH", sans quoi seotools
+        // l'ajoute une deuxième fois (ex: "... à Abidjan — OYETECH — OYETECH").
+        SEOTools::setTitle($title, false);
         SEOTools::setDescription($description);
         SEOTools::opengraph()->setTitle($title);
         SEOTools::opengraph()->setDescription($description);
