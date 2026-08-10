@@ -17,32 +17,15 @@
 
 header('Content-Type: text/plain');
 
-// TEMPORAIRE — diagnostic d'une erreur 500 muette (pas d'accès aux logs serveur
-// sans shell sur cet hébergement). À retirer une fois la cause identifiée.
-ini_set('display_errors', '1');
-ini_set('display_startup_errors', '1');
+// Les erreurs ne sont jamais affichées publiquement (endpoint accessible sans
+// auth forte, protégé uniquement par le token) — elles sont journalisées dans
+// oyetech-app/storage/logs/deploy-hook.log pour être consultées après coup.
+ini_set('display_errors', '0');
+ini_set('log_errors', '1');
+ini_set('error_log', __DIR__.'/../storage/logs/deploy-hook.log');
 error_reporting(E_ALL);
 @ini_set('memory_limit', '512M');
 @set_time_limit(120);
-
-register_shutdown_function(function () {
-    $error = error_get_last();
-    if ($error !== null && in_array($error['type'], [E_ERROR, E_PARSE, E_CORE_ERROR, E_COMPILE_ERROR], true)) {
-        echo "\n\n=== ERREUR FATALE CAPTURÉE ===\n";
-        echo "Type: {$error['type']}\n";
-        echo "Message: {$error['message']}\n";
-        echo "Fichier: {$error['file']}:{$error['line']}\n";
-    }
-});
-
-function deployStep(string $label): void
-{
-    echo "--- {$label} ---\n";
-    if (function_exists('ob_flush')) {
-        @ob_flush();
-    }
-    @flush();
-}
 
 if (! class_exists('ZipArchive')) {
     http_response_code(500);
@@ -80,6 +63,25 @@ function extractDeployZip(string $zipPath, string $target, string $label): bool
 $appOk = extractDeployZip(__DIR__.'/../oyetech-app.zip', __DIR__.'/..', 'Application (oyetech-app)');
 $webrootOk = extractDeployZip(__DIR__.'/../www.zip', __DIR__.'/../../www', 'Dossier public (www)');
 
+// Le ZIP exclut le contenu de storage/framework/{cache,sessions,testing,views}
+// et storage/logs (voir .github/workflows/deploy.yml) pour ne jamais écraser
+// les fichiers gérés par le serveur — mais ça veut dire que ces dossiers eux-
+// mêmes peuvent ne pas exister après une extraction sur un dossier vierge, ce
+// que Laravel exige (ex: le compilateur Blade échoue sans storage/framework/views).
+foreach ([
+    'storage/framework/cache/data',
+    'storage/framework/sessions',
+    'storage/framework/testing',
+    'storage/framework/views',
+    'storage/logs',
+    'bootstrap/cache',
+] as $dir) {
+    $path = __DIR__.'/../'.$dir;
+    if (! is_dir($path)) {
+        mkdir($path, 0775, true);
+    }
+}
+
 // OVH garde parfois en cache l'ancien contenu des fichiers réécrits.
 if (function_exists('opcache_reset')) {
     @opcache_reset();
@@ -91,25 +93,15 @@ if (! $appOk) {
 }
 
 // 2) Le nouveau code est en place : on démarre Laravel avec le vendor/ à jour.
-deployStep('Avant require vendor/autoload.php');
-
 try {
     require __DIR__.'/../vendor/autoload.php';
-    deployStep('Après autoload — avant bootstrap/app.php');
-
     $app = require_once __DIR__.'/../bootstrap/app.php';
-    deployStep('Après bootstrap/app.php — avant kernel->bootstrap()');
-
     $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
     $kernel->bootstrap();
-    deployStep('Laravel démarré avec succès');
 } catch (\Throwable $e) {
-    echo "\n=== EXCEPTION AU DÉMARRAGE DE LARAVEL ===\n";
-    echo get_class($e).': '.$e->getMessage()."\n";
-    echo $e->getFile().':'.$e->getLine()."\n";
-    echo $e->getTraceAsString()."\n";
+    error_log('Démarrage Laravel échoué : '.$e->getMessage()."\n".$e->getTraceAsString());
     http_response_code(500);
-    exit;
+    exit("\nDémarrage de Laravel échoué — voir storage/logs/deploy-hook.log et storage/logs/laravel.log.\n");
 }
 
 echo "\n=== Migrations ===\n";
@@ -117,9 +109,8 @@ try {
     Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
     echo Illuminate\Support\Facades\Artisan::output();
 } catch (\Throwable $e) {
-    echo "=== EXCEPTION PENDANT LES MIGRATIONS ===\n";
-    echo get_class($e).': '.$e->getMessage()."\n";
-    echo $e->getTraceAsString()."\n";
+    error_log('Migrations échouées : '.$e->getMessage()."\n".$e->getTraceAsString());
+    echo "ÉCHEC des migrations — voir storage/logs/deploy-hook.log.\n";
 }
 
 // Apache peut refuser de traverser www/storage (FollowSymLinks non permis via
@@ -142,11 +133,20 @@ if (is_link($link)) {
 }
 
 echo "\n=== Rafraîchissement des caches ===\n";
-Illuminate\Support\Facades\Artisan::call('optimize:clear');
-echo Illuminate\Support\Facades\Artisan::output();
-Illuminate\Support\Facades\Artisan::call('config:cache');
-Illuminate\Support\Facades\Artisan::call('route:cache');
-Illuminate\Support\Facades\Artisan::call('view:cache');
+$exitCodes = [
+    'optimize:clear' => Illuminate\Support\Facades\Artisan::call('optimize:clear'),
+    'config:cache' => Illuminate\Support\Facades\Artisan::call('config:cache'),
+    'route:cache' => Illuminate\Support\Facades\Artisan::call('route:cache'),
+    'view:cache' => Illuminate\Support\Facades\Artisan::call('view:cache'),
+];
+
+foreach ($exitCodes as $command => $exitCode) {
+    if ($exitCode !== 0) {
+        error_log("Commande {$command} a échoué (code {$exitCode}) : ".Illuminate\Support\Facades\Artisan::output());
+        echo "ÉCHEC {$command} (code {$exitCode}) — voir storage/logs/deploy-hook.log.\n";
+    }
+}
+
 echo "Caches config/route/view régénérés.\n";
 
 echo "\n=== Terminé ===\n";
