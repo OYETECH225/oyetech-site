@@ -120,6 +120,7 @@ try {
 // absents du zip, il fallait les retirer explicitement une fois.
 foreach ([
     __DIR__.'/../../www/cleanup-wordpress.php',
+    __DIR__.'/../../www/tail-log.php',
 ] as $obsolete) {
     if (file_exists($obsolete)) {
         unlink($obsolete);

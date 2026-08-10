@@ -3,7 +3,7 @@
 @php
     app(\App\Services\SeoService::class)->set(
         'Réalisations — OYETECH',
-        'Découvrez les projets et études de cas menés par OYETECH pour ses clients en Afrique de l\'Ouest, avec des résultats chiffrés.'
+        'Découvrez les projets et études de cas menés par OYETECH pour ses clients en Afrique et en Europe, avec des résultats chiffrés.'
     );
 @endphp
 

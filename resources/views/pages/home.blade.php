@@ -3,7 +3,7 @@
 @php
     app(\App\Services\SeoService::class)->set(
         'OYETECH — Agence digitale & cabinet stratégique à Abidjan',
-        'OYETECH accompagne entreprises et institutions de Côte d\'Ivoire avec des solutions de conseil, communication, marketing digital et technologie.'
+        'OYETECH accompagne entreprises et institutions en Afrique et en Europe avec des solutions de conseil, communication, marketing digital et technologie.'
     );
 @endphp
 
@@ -66,7 +66,7 @@
                             <span id="hero-word-{{ $i + 1 }}" class="-translate-y-5 absolute left-0 top-0 whitespace-nowrap opacity-0 text-white">{{ $word }}</span>
                         @endforeach
                     </span>
-                    <br>pour la Côte d'Ivoire
+                    <br>pour l'Afrique et l'Europe
                 </h1>
 
                 <p class="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" data-reveal>
@@ -568,9 +568,9 @@
             <h2 class="section-title">Questions <span class="gradient-text">fréquentes</span></h2>
         </div>
         <x-faq :items="[
-            ['q' => 'Quels types d\'entreprises accompagnez-vous ?', 'a' => 'Nous travaillons avec des PME, grandes entreprises, institutions publiques et startups basées en Côte d\'Ivoire.'],
+            ['q' => 'Quels types d\'entreprises accompagnez-vous ?', 'a' => 'Nous travaillons avec des PME, grandes entreprises, institutions publiques et startups, en Afrique et en Europe.'],
             ['q' => 'Combien de temps dure une mission type ?', 'a' => 'Cela dépend du pôle et du périmètre : de quelques semaines pour une campagne de communication à plusieurs mois pour une transformation digitale complète.'],
-            ['q' => 'Travaillez-vous avec des clients hors de Côte d\'Ivoire ?', 'a' => 'Notre agence est basée à Abidjan et nous sommes implantés en Côte d\'Ivoire. Nous accompagnons ponctuellement, à distance, des clients dont l\'activité s\'étend à d\'autres pays d\'Afrique de l\'Ouest.'],
+            ['q' => 'Travaillez-vous avec des clients hors de Côte d\'Ivoire ?', 'a' => 'Oui. Notre agence est implantée à Abidjan, mais nous intervenons auprès de clients partout en Afrique et en Europe, à distance ou avec des déplacements ponctuels selon les besoins.'],
             ['q' => 'Comment se déroule la première prise de contact ?', 'a' => 'Vous remplissez le formulaire de contact ou réservez un créneau via Calendly. Notre équipe revient vers vous en moins de 48h pour cadrer votre besoin.'],
         ]" />
     </div>

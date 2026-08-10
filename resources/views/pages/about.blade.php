@@ -3,14 +3,14 @@
 @php
     app(\App\Services\SeoService::class)->set(
         'À propos — OYETECH',
-        'Vision, mission, valeurs et gouvernance d\'OYETECH, cabinet stratégique et acteur technologique de référence en Côte d\'Ivoire.'
+        'Vision, mission, valeurs et gouvernance d\'OYETECH, cabinet stratégique et acteur technologique basé à Abidjan, intervenant en Afrique et en Europe.'
     );
 @endphp
 
 @section('content')
 
 <x-hero eyebrow="À propos" title="Cabinet stratégique et acteur technologique opérationnel"
-    subtitle="OYETECH réunit conseil, communication, marketing digital et solutions numériques au service de la croissance de ses clients en Côte d'Ivoire." />
+    subtitle="OYETECH réunit conseil, communication, marketing digital et solutions numériques au service de la croissance de ses clients en Afrique et en Europe." />
 
 <section class="bg-white py-24">
     <div class="mx-auto max-w-7xl px-6">
@@ -68,7 +68,7 @@
                 <h2 class="section-title">Expertise stratégique</h2>
                 <p class="mt-4 text-ink/60">
                     Plus de 12 ans d'expérience cumulée en conseil, communication, marketing digital et développement
-                    de solutions numériques, au service d'entreprises et d'institutions de Côte d'Ivoire.
+                    de solutions numériques, au service d'entreprises et d'institutions en Afrique et en Europe.
                 </p>
             </div>
         </div>
