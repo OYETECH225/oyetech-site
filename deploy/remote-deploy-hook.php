@@ -166,6 +166,18 @@ foreach ($exitCodes as $command => $exitCode) {
     }
 }
 
+// app:generate-sitemap écrit dans public_path('sitemap.xml'), c'est-à-dire
+// oyetech-app/public/ — qui n'est PAS le webroot réellement servi (www/, un
+// dossier frère séparé). Sans cette copie, le fichier généré n'est jamais vu.
+$generatedSitemap = __DIR__.'/../public/sitemap.xml';
+$servedSitemap = __DIR__.'/../../www/sitemap.xml';
+if (file_exists($generatedSitemap) && copy($generatedSitemap, $servedSitemap)) {
+    echo "sitemap.xml copié vers www/.\n";
+} else {
+    error_log("Échec de la copie du sitemap vers {$servedSitemap}");
+    echo "ÉCHEC copie sitemap.xml vers www/ — voir storage/logs/deploy-hook.log.\n";
+}
+
 echo "Caches config/route/view régénérés.\n";
 
 echo "\n=== Terminé ===\n";
