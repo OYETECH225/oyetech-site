@@ -27,6 +27,30 @@ function tailFile(string $path, int $lines = 200): string
     return "=== {$path} (dernières ".count($tail)." lignes) ===\n".implode("\n", $tail)."\n";
 }
 
+echo "=== Contenu du dossier racine (parent de www/) ===\n";
+$root = __DIR__.'/..';
+foreach (scandir($root) as $entry) {
+    if ($entry === '.' || $entry === '..') {
+        continue;
+    }
+    $full = $root.'/'.$entry;
+    echo (is_dir($full) ? '[dir]  ' : '[file] ').$entry."\n";
+}
+echo "\n=== Contenu de oyetech-app/ (si présent) ===\n";
+$appDir = __DIR__.'/../oyetech-app';
+if (is_dir($appDir)) {
+    foreach (scandir($appDir) as $entry) {
+        if ($entry === '.' || $entry === '..') {
+            continue;
+        }
+        $full = $appDir.'/'.$entry;
+        echo (is_dir($full) ? '[dir]  ' : '[file] ').$entry."\n";
+    }
+} else {
+    echo "ABSENT\n";
+}
+echo "\n\n";
+
 $envPath = __DIR__.'/../oyetech-app/.env';
 echo "=== Vérification .env (sans exposer de secret) ===\n";
 if (! file_exists($envPath)) {
