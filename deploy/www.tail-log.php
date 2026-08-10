@@ -27,7 +27,15 @@ function tailFile(string $path, int $lines = 200): string
     return "=== {$path} (dernières ".count($tail)." lignes) ===\n".implode("\n", $tail)."\n";
 }
 
-echo "=== Contenu du dossier racine (parent de www/) ===\n";
+echo "=== Contenu de www/ (ce dossier) ===\n";
+foreach (scandir(__DIR__) as $entry) {
+    if ($entry === '.' || $entry === '..') {
+        continue;
+    }
+    $full = __DIR__.'/'.$entry;
+    echo (is_dir($full) ? '[dir]  ' : '[file] ').$entry."\n";
+}
+echo "\n=== Contenu du dossier racine (parent de www/) ===\n";
 $root = __DIR__.'/..';
 foreach (scandir($root) as $entry) {
     if ($entry === '.' || $entry === '..') {
