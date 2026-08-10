@@ -13,7 +13,7 @@
     $heroSubtitle = \App\Models\Setting::get('hero_subtitle', 'Cabinet stratégique et agence digitale 360°, OYETECH accompagne les entreprises et institutions de référence dans leur transformation et leur croissance.');
     $heroStats = [
         [\App\Models\Setting::get('stat_projects', '120+'), \App\Models\Setting::get('stat_projects_label', 'Projets livrés')],
-        [\App\Models\Setting::get('stat_countries', '1'), \App\Models\Setting::get('stat_countries_label', 'Pays couvert')],
+        [\App\Models\Setting::get('stat_experience', '12+'), \App\Models\Setting::get('stat_experience_label', 'Années d\'expertise')],
         [\App\Models\Setting::get('stat_satisfaction', '98%'), \App\Models\Setting::get('stat_satisfaction_label', 'Satisfaction client')],
     ];
     $ctaTitle    = \App\Models\Setting::get('cta_title', 'Prêt à transformer votre ambition en résultats ?');
@@ -251,7 +251,7 @@
                 <div class="relative grid grid-cols-2 gap-4">
                     @foreach([
                         ['value' => 120, 'suffix' => '+', 'label' => 'Projets livrés'],
-                        ['value' => 1,   'suffix' => '',  'label' => 'Pays couvert'],
+                        ['value' => 5,   'suffix' => '',  'label' => 'Pôles d\'expertise'],
                         ['value' => 98,  'suffix' => '%', 'label' => 'Clients satisfaits'],
                         ['value' => 12,  'suffix' => '+', 'label' => 'Années d\'expertise'],
                     ] as $stat)

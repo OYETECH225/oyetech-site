@@ -34,8 +34,8 @@ class ManageSettings extends Page implements HasForms
 
             'stat_projects'           => Setting::get('stat_projects', '120+'),
             'stat_projects_label'     => Setting::get('stat_projects_label', 'Projets livrés'),
-            'stat_countries'          => Setting::get('stat_countries', '1'),
-            'stat_countries_label'    => Setting::get('stat_countries_label', 'Pays couvert'),
+            'stat_experience'          => Setting::get('stat_experience', '12+'),
+            'stat_experience_label'    => Setting::get('stat_experience_label', 'Années d\'expertise'),
             'stat_satisfaction'       => Setting::get('stat_satisfaction', '98%'),
             'stat_satisfaction_label' => Setting::get('stat_satisfaction_label', 'Satisfaction client'),
 
@@ -89,8 +89,8 @@ class ManageSettings extends Page implements HasForms
                     ->schema([
                         Forms\Components\TextInput::make('stat_projects')->label('Valeur — Projets')->placeholder('120+'),
                         Forms\Components\TextInput::make('stat_projects_label')->label('Label — Projets')->placeholder('Projets livrés'),
-                        Forms\Components\TextInput::make('stat_countries')->label('Valeur — Pays')->placeholder('1'),
-                        Forms\Components\TextInput::make('stat_countries_label')->label('Label — Pays')->placeholder('Pays couvert'),
+                        Forms\Components\TextInput::make('stat_experience')->label('Valeur — Expertise')->placeholder('12+'),
+                        Forms\Components\TextInput::make('stat_experience_label')->label('Label — Expertise')->placeholder('Années d\'expertise'),
                         Forms\Components\TextInput::make('stat_satisfaction')->label('Valeur — Satisfaction')->placeholder('98%'),
                         Forms\Components\TextInput::make('stat_satisfaction_label')->label('Label — Satisfaction')->placeholder('Satisfaction client'),
                     ])
