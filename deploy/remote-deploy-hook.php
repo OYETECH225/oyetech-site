@@ -119,7 +119,6 @@ try {
 // dépôt — mais comme le déploiement n'efface jamais les fichiers distants
 // absents du zip, il fallait les retirer explicitement une fois.
 foreach ([
-    __DIR__.'/../../www/tail-log.php',
     __DIR__.'/../../www/cleanup-wordpress.php',
 ] as $obsolete) {
     if (file_exists($obsolete)) {
