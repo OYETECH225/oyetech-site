@@ -6,7 +6,7 @@
                     <img src="{{ asset('images/logo-full.png') }}" alt="OYETECH" width="535" height="107" class="h-7 w-auto brightness-0 invert">
                 </a>
                 <p class="mt-4 text-sm leading-relaxed text-white/50">
-                    Agence digitale et cabinet stratégique basé à Abidjan, au service des entreprises et institutions en Afrique et en Europe.
+                    Agence digitale et cabinet stratégique basé à Abidjan, au service des entreprises et institutions en Afrique.
                 </p>
                 <div class="mt-6 flex gap-3">
                     <a href="#" aria-label="LinkedIn" class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/35 transition hover:border-white/30 hover:bg-white/8 hover:text-white/70">
