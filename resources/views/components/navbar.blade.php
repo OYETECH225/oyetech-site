@@ -5,22 +5,31 @@
     :class="scrolled ? 'bg-ink/95 shadow-lg backdrop-blur' : '{{ $transparent ? 'bg-transparent' : 'bg-ink' }}'">
     <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4">
         <a href="{{ route('home') }}" class="flex items-center">
-            <img src="{{ asset('images/logo-full.png') }}" alt="OYETECH" width="535" height="107" class="h-7 w-auto brightness-0 invert">
+            <picture>
+                <source srcset="{{ asset('images/logo-full.webp') }}" type="image/webp">
+                <img src="{{ asset('images/logo-full.png') }}" alt="OYETECH" width="535" height="107" fetchpriority="high" class="h-7 w-auto brightness-0 invert">
+            </picture>
         </a>
 
         <div class="hidden items-center gap-8 lg:flex">
             <a href="{{ route('home') }}" class="text-sm font-medium text-white/70 transition hover:text-white">Accueil</a>
             <a href="{{ route('about') }}" class="text-sm font-medium text-white/70 transition hover:text-white">À propos</a>
 
-            <div class="relative" x-data="{ servicesOpen: false }" @mouseleave="servicesOpen = false">
-                <button @mouseenter="servicesOpen = true" :aria-expanded="servicesOpen"
+            {{-- Ouverture à la souris (survol) et au clavier (Entrée/Espace) ; Échap ou sortie du focus referme --}}
+            <div class="relative" x-data="{ servicesOpen: false }"
+                @mouseleave="servicesOpen = false"
+                @keydown.escape.stop="if (servicesOpen) { servicesOpen = false; $refs.servicesButton.focus() }"
+                @focusout="if (! $el.contains($event.relatedTarget)) servicesOpen = false">
+                <button type="button" x-ref="servicesButton"
+                    @mouseenter="servicesOpen = true" @click="servicesOpen = ! servicesOpen"
+                    :aria-expanded="servicesOpen.toString()" aria-expanded="false" aria-controls="services-menu"
                     class="flex items-center gap-1 text-sm font-medium text-white/70 transition hover:text-white">
                     Services
-                    <svg class="h-4 w-4 transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <svg class="h-4 w-4 transition-transform duration-200" :class="servicesOpen ? 'rotate-180' : ''" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
                     </svg>
                 </button>
-                <div x-show="servicesOpen" x-cloak x-transition class="absolute left-0 top-full w-64 pt-2">
+                <div id="services-menu" x-show="servicesOpen" x-cloak x-transition class="absolute left-0 top-full w-64 pt-2">
                     <div class="overflow-hidden rounded-2xl bg-white p-2 shadow-2xl">
                         <a href="{{ route('services.index') }}" class="block rounded-xl px-4 py-3 text-sm font-semibold text-ink hover:bg-ink/5">Tous nos pôles</a>
                         <a href="{{ route('services.conseil') }}" class="block rounded-xl px-4 py-3 text-sm text-ink/60 hover:bg-ink/5 hover:text-ink">Conseil & Stratégie</a>

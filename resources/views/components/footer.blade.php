@@ -13,7 +13,10 @@
         <div class="grid gap-12 lg:grid-cols-4">
             <div class="lg:col-span-1">
                 <a href="{{ route('home') }}" class="inline-flex items-center">
-                    <img src="{{ asset('images/logo-full.png') }}" alt="OYETECH" width="535" height="107" class="h-7 w-auto brightness-0 invert">
+                    <picture>
+                        <source srcset="{{ asset('images/logo-full.webp') }}" type="image/webp">
+                        <img src="{{ asset('images/logo-full.png') }}" alt="OYETECH" width="535" height="107" loading="lazy" decoding="async" class="h-7 w-auto brightness-0 invert">
+                    </picture>
                 </a>
                 <p class="mt-4 text-sm leading-relaxed text-white/50">
                     Agence digitale et cabinet stratégique basé à Abidjan, au service des entreprises et institutions en Afrique.

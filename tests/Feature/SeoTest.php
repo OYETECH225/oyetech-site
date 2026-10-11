@@ -137,6 +137,31 @@ class SeoTest extends TestCase
         $this->assertSame(count($descriptions), count(array_unique($descriptions)), 'Descriptions en double');
     }
 
+    public function test_images_avec_alt_dimensions_et_logos_webp(): void
+    {
+        $html = $this->get(route('home'))->getContent();
+
+        preg_match_all('/<img\b[^>]*>/', $html, $imgs);
+        foreach ($imgs[0] as $img) {
+            $this->assertMatchesRegularExpression('/\salt="/', $img, $img);
+            $this->assertMatchesRegularExpression('/\swidth="\d+"/', $img, $img);
+            $this->assertMatchesRegularExpression('/\sheight="\d+"/', $img, $img);
+        }
+
+        $this->assertSame(2, substr_count($html, 'images/logo-full.webp" type="image/webp"'));
+        $this->assertMatchesRegularExpression('/<footer.*logo-full\.png"[^>]*loading="lazy"/s', $html);
+        $this->assertFileExists(public_path('images/logo-full.webp'));
+    }
+
+    public function test_menu_services_utilisable_au_clavier(): void
+    {
+        $this->get(route('home'))
+            ->assertSee('@click="servicesOpen = ! servicesOpen"', false)
+            ->assertSee('aria-controls="services-menu"', false)
+            ->assertSee('id="services-menu"', false)
+            ->assertSee('@keydown.escape.stop', false);
+    }
+
     public function test_en_tetes_de_securite(): void
     {
         $this->get(route('home'))
