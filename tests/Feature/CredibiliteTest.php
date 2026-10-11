@@ -90,12 +90,27 @@ class CredibiliteTest extends TestCase
 
     public function test_anciennete_calculee_depuis_annee_de_creation(): void
     {
+        config(['entreprise.annee_creation' => 2025]);
         Carbon::setTestNow('2030-06-01');
 
         $this->get(route('home'))
-            ->assertSee('depuis 2012')
-            ->assertSee('>18</span>', false)
+            ->assertSee('Partenaire de confiance depuis 2025')
+            ->assertSee('>5</span>', false)
+            ->assertSee("années d'expertise au service de nos clients", false)
             ->assertDontSee('12+');
+    }
+
+    public function test_anciennete_masquee_sous_trois_ans(): void
+    {
+        config(['entreprise.annee_creation' => 2025]);
+        Carbon::setTestNow('2026-10-11');
+
+        $this->get(route('home'))
+            ->assertDontSee('Partenaire de confiance depuis')
+            ->assertDontSee("Années d&#039;expertise", false)
+            ->assertDontSee("années d'expertise au service de nos clients", false);
+
+        $this->get(route('about'))->assertDontSee("1 ans d'expérience", false);
     }
 
     public function test_chiffres_rendus_cote_serveur(): void

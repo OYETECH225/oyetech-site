@@ -2,8 +2,8 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'À propos d\'OYETECH, agence digitale à Abidjan depuis '.$entreprise->anneeCreation(),
-        'Vision, mission, valeurs et gouvernance d\'OYETECH, cabinet stratégique et acteur technologique basé à Abidjan depuis '.$entreprise->anneeCreation().', intervenant en Afrique.'
+        'À propos d\'OYETECH, cabinet stratégique et agence digitale à Abidjan',
+        'Vision, mission, valeurs et gouvernance d\'OYETECH, cabinet stratégique et acteur technologique basé à Abidjan, intervenant en Afrique.'
     );
 @endphp
 
@@ -67,7 +67,7 @@
             <div data-aos="fade-up">
                 <h2 class="section-title">Expertise stratégique</h2>
                 <p class="mt-4 text-ink/60">
-                    {{ $entreprise->anciennete() }} ans d'expérience, depuis {{ $entreprise->anneeCreation() }}, en conseil, communication, marketing digital et développement
+                    @if($entreprise->afficheAnciennete()){{ $entreprise->anciennete() }} ans d'expérience, depuis {{ $entreprise->anneeCreation() }}, @else Une expertise @endif en conseil, communication, marketing digital et développement
                     de solutions numériques, au service d'entreprises et d'institutions en Afrique.
                 </p>
             </div>

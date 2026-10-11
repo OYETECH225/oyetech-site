@@ -58,7 +58,7 @@ class SeoTest extends TestCase
         $org = $this->ofType($this->jsonLd($this->get(route('home'))->getContent()), 'ProfessionalService');
 
         $this->assertSame('OYETECH SARL', $org['legalName']);
-        $this->assertSame('2012', $org['foundingDate']);
+        $this->assertSame((string) config('entreprise.annee_creation'), $org['foundingDate']);
         $this->assertSame('Yamoussa KOUYATE', $org['founder'][0]['name']);
         $this->assertArrayNotHasKey('telephone', $org);
         $this->assertArrayNotHasKey('sameAs', $org);

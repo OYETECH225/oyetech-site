@@ -66,6 +66,15 @@ class Entreprise
     }
 
     /** « rue, Abidjan, Côte d'Ivoire », ou « Abidjan, Côte d'Ivoire » si la rue manque. */
+    /**
+     * L'ancienneté n'est mise en avant qu'à partir de 3 ans : « 1 année d'expertise »
+     * dessert la crédibilité. Les blocs concernés réapparaissent automatiquement.
+     */
+    public function afficheAnciennete(): bool
+    {
+        return $this->anciennete() >= 3;
+    }
+
     public function adresse(): string
     {
         return collect([

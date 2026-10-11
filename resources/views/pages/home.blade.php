@@ -11,12 +11,14 @@
     $heroTitle = \App\Models\Setting::get('hero_title', 'Stratégie, communication et solutions digitales pour faire grandir les entreprises africaines');
     $heroBadge = \App\Models\Setting::get('hero_badge', 'Agence Digitale · Abidjan · Côte d\'Ivoire');
     $heroSubtitle = \App\Models\Setting::get('hero_subtitle', 'Cabinet stratégique et agence digitale 360°, OYETECH accompagne les entreprises et institutions de référence dans leur transformation et leur croissance.');
-    $heroStats = [
+    $heroStats = array_values(array_filter([
         [\App\Models\Setting::get('stat_projects', '120+'), \App\Models\Setting::get('stat_projects_label', 'Projets livrés')],
-        // Ancienneté calculée depuis l'année de création (config/entreprise.php), jamais saisie à la main
-        [$entreprise->anciennete(), 'Années d\'expertise'],
+        // Ancienneté calculée depuis l'année de création (config/entreprise.php), affichée à partir de 3 ans
+        $entreprise->afficheAnciennete() ? [$entreprise->anciennete(), 'Années d\'expertise'] : null,
         [\App\Models\Setting::get('stat_satisfaction', '98%'), \App\Models\Setting::get('stat_satisfaction_label', 'Satisfaction client')],
-    ];
+    ]));
+    $projectsStat = \App\Models\Setting::get('stat_projects', '120+');
+    $satisfactionStat = \App\Models\Setting::get('stat_satisfaction', '98%');
     $ctaTitle    = \App\Models\Setting::get('cta_title', 'Prêt à transformer votre ambition en résultats ?');
     $ctaSubtitle = \App\Models\Setting::get('cta_subtitle', 'Parlons de votre projet et construisons ensemble la prochaine étape de votre croissance.');
     $ctaButton   = \App\Models\Setting::get('cta_button', 'Démarrer un projet');
@@ -100,7 +102,7 @@
 
                     {{-- Statistiques --}}
                     <div class="mb-4 grid grid-cols-3 gap-3">
-                        @foreach([[$heroStats[0][0], 'Projets'], [$heroStats[2][0], 'Satisfaits'], [$entreprise->anciennete(), 'Années']] as [$v, $l])
+                        @foreach([[$projectsStat, 'Projets'], [$satisfactionStat, 'Satisfaits'], [5, 'Pôles']] as [$v, $l])
                             <div class="rounded-xl border border-white/10 bg-white/6 p-3 text-center">
                                 <p class="font-display text-xl font-extrabold text-white">{{ $v }}</p>
                                 <p class="mt-0.5 text-[10px] text-white/35">{{ $l }}</p>
@@ -234,13 +236,13 @@
                 <div class="pointer-events-none absolute -bottom-8 -left-8 h-40 w-40 rounded-full bg-white/3 blur-[50px]" aria-hidden="true"></div>
 
                 <div class="relative grid grid-cols-2 gap-4">
-                    @foreach([
+                    @foreach(array_filter([
                         ['value' => 120, 'suffix' => '+', 'label' => 'Projets livrés'],
                         ['value' => 5,   'suffix' => '',  'label' => 'Pôles d\'expertise'],
                         ['value' => 98,  'suffix' => '%', 'label' => 'Clients satisfaits'],
-                        ['value' => $entreprise->anciennete(), 'suffix' => '', 'label' => 'Années d\'expertise'],
-                    ] as $stat)
-                        <div x-data="countUp({{ $stat['value'] }})" class="rounded-2xl border border-white/10 bg-white/6 p-6 text-center">
+                        $entreprise->afficheAnciennete() ? ['value' => $entreprise->anciennete(), 'suffix' => '', 'label' => 'Années d\'expertise'] : null,
+                    ]) as $stat)
+                        <div x-data="countUp({{ $stat['value'] }})" class="rounded-2xl border border-white/10 bg-white/6 p-6 text-center {{ $loop->last && $loop->count % 2 ? 'col-span-2' : '' }}">
                             <p class="font-display text-4xl font-extrabold sm:text-5xl">
                                 <span class="text-white" x-text="count">{{ $stat['value'] }}</span><span class="text-white">{{ $stat['suffix'] }}</span>
                             </p>
@@ -252,13 +254,17 @@
                     <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
                         <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                     </span>
-                    <p class="text-sm font-medium text-white/70">Partenaire de confiance depuis {{ $entreprise->anneeCreation() }}</p>
+                    <p class="text-sm font-medium text-white/70">
+                        {{ $entreprise->afficheAnciennete() ? 'Partenaire de confiance depuis '.$entreprise->anneeCreation() : 'Cabinet basé à Abidjan, au service des entreprises africaines' }}
+                    </p>
                 </div>
             </div>
+            @if($entreprise->afficheAnciennete())
             <div class="absolute -bottom-5 -right-5 flex items-center gap-3 rounded-2xl border border-ink/10 bg-white px-5 py-4 shadow-xl">
                 <span class="font-display text-2xl font-extrabold text-ink">{{ $entreprise->anciennete() }}</span>
                 <span class="max-w-[7rem] text-xs font-medium leading-tight text-ink/60">années d'expertise au service de nos clients</span>
             </div>
+            @endif
         </div>
 
         {{-- Droite : texte --}}

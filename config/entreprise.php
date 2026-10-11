@@ -39,7 +39,7 @@ return [
     'telephone' => '+225 07 07 78 75 80',
 
     // Format international sans « + » ni espaces : 225XXXXXXXXXX
-    'whatsapp' => '',
+    'whatsapp' => '2250707787580',
 
     'email' => 'contact@oyetech-ci.com',
 
@@ -66,7 +66,9 @@ return [
         'x' => '',
     ],
 
-    'annee_creation' => 2012,
+    // Année de création de la société (RCCM). L'ancienneté n'est affichée sur le
+    // site qu'à partir de 3 ans (voir Entreprise::afficheAnciennete()).
+    'annee_creation' => 2025,
 
     'calendly' => 'https://calendly.com/oyetech',
 
