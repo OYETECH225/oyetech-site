@@ -18,7 +18,7 @@ class JuridiqueTest extends TestCase
             ->assertOk()
             ->assertSee('OYETECH SARL')
             ->assertSee('Yamoussa KOUYATE')
-            ->assertSee('contact@oyetech.ci')
+            ->assertSee('contact@oyetech-ci.com')
             ->assertSee('Hébergeur')
             ->assertSee('Propriété intellectuelle')
             ->assertSee('[À FOURNIR]');

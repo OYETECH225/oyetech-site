@@ -41,7 +41,7 @@ return [
     // Format international sans « + » ni espaces : 225XXXXXXXXXX
     'whatsapp' => '',
 
-    'email' => 'contact@oyetech.ci',
+    'email' => 'contact@oyetech-ci.com',
 
     'responsable_publication' => [
         'nom' => 'Yamoussa KOUYATE',
