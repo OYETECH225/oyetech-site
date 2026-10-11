@@ -36,7 +36,7 @@ return [
     ],
 
     // Format d'affichage : +225 XX XX XX XX XX
-    'telephone' => '',
+    'telephone' => '+225 07 07 78 75 80',
 
     // Format international sans « + » ni espaces : 225XXXXXXXXXX
     'whatsapp' => '',
