@@ -24,10 +24,12 @@
             <h2 class="section-title">Notre solution</h2>
             <p class="mt-4 text-ink/60">{{ $project->solution }}</p>
         </div>
-        <div class="rounded-2xl bg-paper p-8" data-aos="fade-up">
-            <h2 class="section-title">Résultats</h2>
-            <p class="mt-4 font-medium text-ink font-semibold">{{ $project->results }}</p>
-        </div>
+        @if(filled($project->results))
+            <div class="rounded-2xl bg-paper p-8" data-aos="fade-up">
+                <h2 class="section-title">Résultats</h2>
+                <p class="mt-4 font-medium text-ink font-semibold">{{ $project->results }}</p>
+            </div>
+        @endif
     </div>
 </section>
 

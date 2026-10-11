@@ -29,7 +29,7 @@ class ProjectSeeder extends Seeder
                 'sector' => 'Agro-industrie',
                 'challenge' => 'Renforcer la notoriété d\'un acteur agro-industriel auprès du grand public et valoriser la production locale.',
                 'solution' => 'Conception d\'une identité de campagne forte, production audiovisuelle et déploiement multicanal (TV, digital, affichage) sur 6 mois.',
-                'results' => 'Notoriété spontanée de la marque en hausse de 28%, plus de 2M de vues sur les contenus digitaux.',
+                'results' => '',
                 'is_featured' => true,
             ],
             [
@@ -40,7 +40,7 @@ class ProjectSeeder extends Seeder
                 'sector' => 'Services financiers',
                 'challenge' => 'Accélérer l\'acquisition d\'utilisateurs sur un marché concurrentiel avec un budget média maîtrisé.',
                 'solution' => 'Stratégie SEA et social ads ciblée, mise en place d\'un funnel de conversion et automatisation du nurturing par email.',
-                'results' => 'Coût d\'acquisition réduit de 40%, +18 000 nouveaux utilisateurs en 6 mois.',
+                'results' => '',
                 'is_featured' => true,
             ],
             [
@@ -51,7 +51,7 @@ class ProjectSeeder extends Seeder
                 'sector' => 'Distribution',
                 'challenge' => 'Digitaliser un réseau de distribution physique et proposer une expérience d\'achat en ligne fiable à grande échelle.',
                 'solution' => 'Développement d\'une plateforme e-commerce sur mesure avec gestion multi-entrepôts, paiement intégré et application de suivi de commande.',
-                'results' => 'Mise en ligne en 4 mois, 99,9% de disponibilité, +60% de ventes en ligne dès le premier trimestre.',
+                'results' => '',
                 'is_featured' => true,
             ],
             [
@@ -62,7 +62,7 @@ class ProjectSeeder extends Seeder
                 'sector' => 'Immobilier',
                 'challenge' => 'L\'agence devait centraliser le suivi de ses contrats de location et sécuriser l\'encaissement des loyers auprès de plusieurs dizaines de propriétaires et locataires.',
                 'solution' => 'Déploiement d\'Ilepay pour la gestion des contrats de location, l\'encaissement digital des loyers et le suivi en temps réel des paiements pour chaque bien.',
-                'results' => 'Plus de 300 contrats de location gérés sur la plateforme, taux d\'impayés réduit de 60%.',
+                'results' => '',
                 'is_featured' => true,
             ],
         ];

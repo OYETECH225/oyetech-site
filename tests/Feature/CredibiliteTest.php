@@ -116,8 +116,29 @@ class CredibiliteTest extends TestCase
     public function test_chiffres_rendus_cote_serveur(): void
     {
         $this->get(route('home'))
-            ->assertSee('x-text="count">98</span>', false)
+            ->assertSee('x-text="count">5</span>', false)
             ->assertDontSee('x-text="count"></span>', false);
+    }
+
+    public function test_aucun_chiffre_non_verifiable(): void
+    {
+        \App\Models\Setting::set('stat_projects', '120+');
+        \App\Models\Setting::set('stat_satisfaction', '98%');
+
+        $this->get(route('home'))
+            ->assertDontSee('120+')
+            ->assertDontSee('98%')
+            ->assertDontSee('95% des projets')
+            ->assertDontSee('Taux de renouvellement')
+            ->assertDontSee('Clients satisfaits')
+            ->assertDontSee('Nos engagements');
+    }
+
+    public function test_bloc_resultats_masque_si_vide(): void
+    {
+        $project = \App\Models\Project::factory()->create(['results' => '']);
+
+        $this->get(route('portfolio.show', $project))->assertOk()->assertDontSee('Résultats');
     }
 
     public function test_maquette_signalee_comme_illustration(): void

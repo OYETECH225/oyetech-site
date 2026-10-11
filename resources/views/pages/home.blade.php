@@ -11,14 +11,12 @@
     $heroTitle = \App\Models\Setting::get('hero_title', 'Stratégie, communication et solutions digitales pour faire grandir les entreprises africaines');
     $heroBadge = \App\Models\Setting::get('hero_badge', 'Agence Digitale · Abidjan · Côte d\'Ivoire');
     $heroSubtitle = \App\Models\Setting::get('hero_subtitle', 'Cabinet stratégique et agence digitale 360°, OYETECH accompagne les entreprises et institutions de référence dans leur transformation et leur croissance.');
+    // Uniquement des faits vérifiables (pas de nombre de projets ni de taux de satisfaction)
     $heroStats = array_values(array_filter([
-        [\App\Models\Setting::get('stat_projects', '120+'), \App\Models\Setting::get('stat_projects_label', 'Projets livrés')],
-        // Ancienneté calculée depuis l'année de création (config/entreprise.php), affichée à partir de 3 ans
+        ['5', 'Pôles d\'expertise'],
         $entreprise->afficheAnciennete() ? [$entreprise->anciennete(), 'Années d\'expertise'] : null,
-        [\App\Models\Setting::get('stat_satisfaction', '98%'), \App\Models\Setting::get('stat_satisfaction_label', 'Satisfaction client')],
+        ['Abidjan', 'Siège en Côte d\'Ivoire'],
     ]));
-    $projectsStat = \App\Models\Setting::get('stat_projects', '120+');
-    $satisfactionStat = \App\Models\Setting::get('stat_satisfaction', '98%');
     $ctaTitle    = \App\Models\Setting::get('cta_title', 'Prêt à transformer votre ambition en résultats ?');
     $ctaSubtitle = \App\Models\Setting::get('cta_subtitle', 'Parlons de votre projet et construisons ensemble la prochaine étape de votre croissance.');
     $ctaButton   = \App\Models\Setting::get('cta_button', 'Démarrer un projet');
@@ -100,16 +98,6 @@
                         @endforeach
                     </div>
 
-                    {{-- Statistiques --}}
-                    <div class="mb-4 grid grid-cols-3 gap-3">
-                        @foreach([[$projectsStat, 'Projets'], [$satisfactionStat, 'Satisfaits'], [5, 'Pôles']] as [$v, $l])
-                            <div class="rounded-xl border border-white/10 bg-white/6 p-3 text-center">
-                                <p class="font-display text-xl font-extrabold text-white">{{ $v }}</p>
-                                <p class="mt-0.5 text-[10px] text-white/35">{{ $l }}</p>
-                            </div>
-                        @endforeach
-                    </div>
-
                     {{-- Activité récente --}}
                     <div class="space-y-2">
                         @foreach([
@@ -128,31 +116,6 @@
                     </div>
                 </div>
 
-                {{-- Carte flottante : satisfaction --}}
-                <div class="absolute -left-10 top-1/4 z-10 flex items-center gap-3 rounded-2xl border border-white/10 bg-navy-light px-4 py-3 shadow-2xl shadow-black/30">
-                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
-                        <svg class="h-5 w-5 text-white" fill="currentColor" viewBox="0 0 20 20">
-                            <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 00-.364 1.118l1.287 3.957c.299.921-.755 1.688-1.539 1.118l-3.367-2.446a1 1 0 00-1.176 0l-3.367 2.446c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/>
-                        </svg>
-                    </span>
-                    <div>
-                        <p class="text-[10px] font-medium text-white/45">Satisfaction client</p>
-                        <p class="text-sm font-bold text-white">98% — Excellent</p>
-                    </div>
-                </div>
-
-                {{-- Carte flottante : livraison --}}
-                <div class="absolute -right-8 bottom-1/4 z-10 flex items-center gap-3 rounded-2xl border border-white/10 bg-navy-light px-4 py-3 shadow-2xl shadow-black/30">
-                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
-                        <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </span>
-                    <div>
-                        <p class="text-[10px] font-medium text-white/45">Livraison dans les délais</p>
-                        <p class="text-sm font-bold text-white">95% des projets</p>
-                    </div>
-                </div>
             </div>
 
         </div>
@@ -237,9 +200,7 @@
 
                 <div class="relative grid grid-cols-2 gap-4">
                     @foreach(array_filter([
-                        ['value' => 120, 'suffix' => '+', 'label' => 'Projets livrés'],
                         ['value' => 5,   'suffix' => '',  'label' => 'Pôles d\'expertise'],
-                        ['value' => 98,  'suffix' => '%', 'label' => 'Clients satisfaits'],
                         $entreprise->afficheAnciennete() ? ['value' => $entreprise->anciennete(), 'suffix' => '', 'label' => 'Années d\'expertise'] : null,
                     ]) as $stat)
                         <div x-data="countUp({{ $stat['value'] }})" class="rounded-2xl border border-white/10 bg-white/6 p-6 text-center {{ $loop->last && $loop->count % 2 ? 'col-span-2' : '' }}">
@@ -298,45 +259,7 @@
             </div>
         </div>
     </div>
-    <x-wave-divider fill="#111111" :height="64" />
-</section>
-
-{{-- ============================================================
-     ENGAGEMENTS — barres grises sur fond noir
-     ============================================================ --}}
-<section class="relative overflow-hidden bg-navy py-20 text-white">
-    <div class="grid-dark absolute inset-0" style="--grid-size:60px; --grid-speed:24s" aria-hidden="true"></div>
-    <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
-        <div class="blob absolute -right-24 -top-24 h-64 w-64 bg-white/5"
-             style="--blob-morph:16s; --blob-float:21s;"></div>
-        <div class="blob absolute -bottom-16 left-1/4 h-56 w-56 bg-white/4"
-             style="--blob-morph:20s; --blob-float:26s; animation-delay:-6s,-10s;"></div>
-    </div>
-
-    <div class="relative mx-auto max-w-4xl px-6">
-        <div class="mb-12 text-center" data-reveal>
-            <span class="section-badge-light mb-4 inline-flex">Nos engagements</span>
-            <h2 class="section-title-light">Une exigence mesurée à <span class="text-white">chaque mission</span></h2>
-        </div>
-        <div class="space-y-8" data-reveal-group>
-            @foreach([
-                ['label' => 'Clients satisfaits', 'value' => 98],
-                ['label' => 'Projets livrés dans les délais', 'value' => 95],
-                ['label' => 'Taux de renouvellement des contrats', 'value' => 90],
-            ] as $bar)
-                <div data-reveal x-data="countUp({{ $bar['value'] }})">
-                    <div class="mb-3 flex items-baseline justify-between">
-                        <p class="text-sm font-medium text-white/70">{{ $bar['label'] }}</p>
-                        <p class="font-display text-lg font-bold"><span class="text-white" x-text="count">{{ $bar['value'] }}</span><span class="text-white">%</span></p>
-                    </div>
-                    <div class="h-2.5 overflow-hidden rounded-full bg-white/10">
-                        <div class="h-full rounded-full bg-white transition-all duration-1000" style="width: {{ $bar['value'] }}%" :style="`width: ${count}%`"></div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-    </div>
-    <x-wave-divider fill="#080808" :height="56" />
+    <x-wave-divider fill="#080808" :height="64" />
 </section>
 
 {{-- ============================================================

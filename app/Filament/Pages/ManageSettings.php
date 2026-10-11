@@ -30,11 +30,6 @@ class ManageSettings extends Page implements HasForms
             'hero_subtitle' => Setting::get('hero_subtitle', 'Cabinet stratégique et agence digitale 360°, OYETECH accompagne les entreprises et institutions de référence dans leur transformation et leur croissance.'),
             'hero_title'    => Setting::get('hero_title', 'Stratégie, communication et solutions digitales pour faire grandir les entreprises africaines'),
 
-            'stat_projects'           => Setting::get('stat_projects', '120+'),
-            'stat_projects_label'     => Setting::get('stat_projects_label', 'Projets livrés'),
-            'stat_satisfaction'       => Setting::get('stat_satisfaction', '98%'),
-            'stat_satisfaction_label' => Setting::get('stat_satisfaction_label', 'Satisfaction client'),
-
             'cta_title'    => Setting::get('cta_title', 'Prêt à transformer votre ambition en résultats ?'),
             'cta_subtitle' => Setting::get('cta_subtitle', 'Parlons de votre projet et construisons ensemble la prochaine étape de votre croissance.'),
             'cta_button'   => Setting::get('cta_button', 'Démarrer un projet'),
@@ -75,17 +70,6 @@ class ManageSettings extends Page implements HasForms
                             ->columnSpanFull(),
                     ])
                     ->columns(1),
-
-                Forms\Components\Section::make('Statistiques')
-                    ->icon('heroicon-o-chart-bar')
-                    ->description('Chiffres clés affichés dans le hero. Les années d\'expertise sont calculées automatiquement depuis l\'année de création (config/entreprise.php).')
-                    ->schema([
-                        Forms\Components\TextInput::make('stat_projects')->label('Valeur — Projets')->placeholder('120+'),
-                        Forms\Components\TextInput::make('stat_projects_label')->label('Label — Projets')->placeholder('Projets livrés'),
-                        Forms\Components\TextInput::make('stat_satisfaction')->label('Valeur — Satisfaction')->placeholder('98%'),
-                        Forms\Components\TextInput::make('stat_satisfaction_label')->label('Label — Satisfaction')->placeholder('Satisfaction client'),
-                    ])
-                    ->columns(2),
 
                 Forms\Components\Section::make('Bandeau CTA')
                     ->icon('heroicon-o-megaphone')
