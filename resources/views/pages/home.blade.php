@@ -336,8 +336,11 @@
                 <span class="section-badge mb-3 inline-flex">Portfolio</span>
                 <h2 class="section-title">Nos <span class="gradient-text">réalisations</span></h2>
             </div>
+            {{-- Filtres seulement pour les pôles qui ont des réalisations, et s'il y en a au moins deux --}}
+            @php $poleFilters = collect(['conseil' => 'Conseil', 'communication' => 'Communication', 'marketing' => 'Marketing', 'solutions' => 'Solutions', 'ilepay' => 'Ilepay'])->only($projects->pluck('pole')->unique()); @endphp
+            @if($poleFilters->count() > 1)
             <div class="flex flex-wrap gap-2" role="group" aria-label="Filtrer les réalisations par pôle">
-                @foreach(['all' => 'Tous', 'conseil' => 'Conseil', 'communication' => 'Communication', 'marketing' => 'Marketing', 'solutions' => 'Solutions', 'ilepay' => 'Ilepay'] as $key => $label)
+                @foreach(['all' => 'Tous'] + $poleFilters->all() as $key => $label)
                     <button @click="setFilter('{{ $key }}')"
                         :class="filter === '{{ $key }}' ? 'bg-ink text-white shadow-md shadow-black/20' : 'bg-white text-ink/60 hover:text-ink border border-ink/10'"
                         class="min-h-10 rounded-full px-4 py-2 text-sm font-medium transition duration-200">
@@ -345,6 +348,7 @@
                     </button>
                 @endforeach
             </div>
+            @endif
         </div>
     </div>
 

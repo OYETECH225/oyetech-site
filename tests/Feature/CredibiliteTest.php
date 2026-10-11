@@ -141,6 +141,21 @@ class CredibiliteTest extends TestCase
         $this->get(route('portfolio.show', $project))->assertOk()->assertDontSee('Résultats');
     }
 
+    public function test_filtres_realisations_seulement_pour_les_poles_presents(): void
+    {
+        \App\Models\Project::factory()->create(['pole' => 'solutions']);
+
+        $this->get(route('home'))->assertDontSee('Filtrer les réalisations par pôle');
+        $this->get(route('portfolio.index'))->assertDontSee('Filtrer les réalisations par pôle');
+
+        \App\Models\Project::factory()->create(['pole' => 'conseil']);
+
+        $this->get(route('portfolio.index'))
+            ->assertSee('Filtrer les réalisations par pôle')
+            ->assertSee("filter = 'conseil'", false)
+            ->assertDontSee("filter = 'marketing'", false);
+    }
+
     public function test_maquette_signalee_comme_illustration(): void
     {
         $this->get(route('home'))->assertSee('Illustration');
