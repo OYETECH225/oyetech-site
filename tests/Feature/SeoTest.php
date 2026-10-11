@@ -53,7 +53,7 @@ class SeoTest extends TestCase
 
     public function test_json_ld_organization_sans_champs_vides(): void
     {
-        config(['entreprise.telephone' => '', 'entreprise.reseaux.linkedin' => '']);
+        config(['entreprise.telephone' => '', 'entreprise.reseaux.linkedin' => '', 'entreprise.adresse.rue' => '']);
 
         $org = $this->ofType($this->jsonLd($this->get(route('home'))->getContent()), 'ProfessionalService');
 

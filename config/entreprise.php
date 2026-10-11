@@ -29,7 +29,7 @@ return [
     'url' => 'https://www.oyetech-ci.com',
 
     'adresse' => [
-        'rue' => '', // quartier, rue
+        'rue' => 'Yopougon Azito, lot 1175',
         'ville' => 'Abidjan',
         'pays' => "Côte d'Ivoire",
         'code_pays' => 'CI',
