@@ -74,49 +74,30 @@
                 </div>
             </div>
 
-            {{-- Tableau de bord flottant (droite) --}}
-            <div class="relative hidden lg:block" data-reveal>
-                {{-- Carte principale --}}
-                <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-navy-light/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-sm"
-                    role="img" aria-label="Illustration d'un tableau de bord de suivi de projets (données fictives)">
-                    {{-- Barre de titre --}}
-                    <div class="mb-5 flex items-center justify-between">
-                        <div class="flex items-center gap-2">
-                            <span class="h-3 w-3 rounded-full bg-white/40"></span>
-                            <span class="h-3 w-3 rounded-full bg-white/25"></span>
-                            <span class="h-3 w-3 rounded-full bg-white/15"></span>
-                        </div>
-                        <span class="rounded-full border border-white/25 bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white/85">Illustration</span>
-                    </div>
-
-                    {{-- Graphique en barres --}}
-                    <p class="mb-3 text-xs font-semibold uppercase tracking-wider text-white/30">Performance mensuelle</p>
-                    <div class="mb-5 flex h-20 items-end gap-1.5">
-                        @foreach([35, 55, 42, 68, 58, 82, 65, 90, 72, 85, 62, 95] as $i => $h)
-                            <div class="flex-1 rounded-t-sm {{ $h >= 70 ? 'bg-white/70' : 'bg-white/25' }}"
-                                style="height: {{ $h }}%"></div>
+            {{-- Panneau des pôles (droite) : uniquement du contenu réel, chaque ligne mène à la page du pôle --}}
+            @if($services->isNotEmpty())
+            <nav class="relative hidden lg:block" aria-label="Nos pôles d'expertise" data-reveal>
+                <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-navy-light/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-sm">
+                    <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-white/60">Nos {{ $services->count() }} pôles d'expertise</p>
+                    <ul class="space-y-2">
+                        @foreach($services as $service)
+                            <li>
+                                <a href="{{ $service->url }}" class="group flex items-center gap-4 rounded-xl border border-white/5 bg-white/4 px-4 py-3 transition hover:border-white/20 hover:bg-white/10">
+                                    <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-white/10 text-white">
+                                        <x-dynamic-component :component="$service->icon ?? 'heroicon-o-sparkles'" class="h-5 w-5" />
+                                    </span>
+                                    <span class="min-w-0 flex-1">
+                                        <span class="block text-sm font-semibold text-white">{{ $service->name }}</span>
+                                        <span class="block truncate text-xs text-white/60">{{ $service->summary }}</span>
+                                    </span>
+                                    <svg class="h-4 w-4 shrink-0 text-white/60 transition group-hover:translate-x-1 group-hover:text-white" aria-hidden="true" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                                </a>
+                            </li>
                         @endforeach
-                    </div>
-
-                    {{-- Activité récente --}}
-                    <div class="space-y-2">
-                        @foreach([
-                            ['Projet Fintech CI', 'Livré', 'bg-white/70'],
-                            ['Campagne Digital Mali', 'En cours', 'bg-white/40'],
-                            ['Stratégie BtoB Sénégal', 'Planifié', 'bg-white/25'],
-                        ] as [$name, $status, $dot])
-                            <div class="flex items-center justify-between rounded-lg border border-white/5 bg-white/4 px-3 py-2.5">
-                                <span class="text-xs text-white/60">{{ $name }}</span>
-                                <span class="flex items-center gap-1.5 text-xs text-white/40">
-                                    <span class="h-1.5 w-1.5 rounded-full {{ $dot }}"></span>
-                                    {{ $status }}
-                                </span>
-                            </div>
-                        @endforeach
-                    </div>
+                    </ul>
                 </div>
-
-            </div>
+            </nav>
+            @endif
 
         </div>
     </div>

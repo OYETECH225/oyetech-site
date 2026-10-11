@@ -157,9 +157,16 @@ class CredibiliteTest extends TestCase
             ->assertDontSee("filter = 'marketing'", false);
     }
 
-    public function test_maquette_signalee_comme_illustration(): void
+    public function test_plus_de_projets_fictifs_dans_le_hero(): void
     {
-        $this->get(route('home'))->assertSee('Illustration');
+        Service::factory()->create(['pole' => 'solutions', 'is_active' => true, 'name' => 'Solutions Numériques']);
+
+        $this->get(route('home'))
+            ->assertDontSee('Projet Fintech CI')
+            ->assertDontSee('Campagne Digital Mali')
+            ->assertDontSee('Performance mensuelle')
+            ->assertSee("pôles d'expertise", false)
+            ->assertSee(route('services.solutions'), false);
     }
 
     public function test_calendly_cliquable_dans_la_faq(): void
