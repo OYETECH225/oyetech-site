@@ -5,6 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
+    {{-- Active les animations d'apparition seulement si JS tourne (voir app.css) --}}
+    <script>document.documentElement.classList.add('js');</script>
+
     <link rel="icon" type="image/png" href="{{ asset('images/logo-mark.png') }}">
     <link rel="apple-touch-icon" href="{{ asset('images/logo-mark.png') }}">
 
@@ -74,12 +77,12 @@
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
 <body class="bg-white text-ink antialiased">
-    <div class="cursor-ring" aria-hidden="true" data-cursor></div>
-
     @if(config('services.gtm.id'))
     <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={{ config('services.gtm.id') }}"
         height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     @endif
+
+    <div class="cursor-ring" aria-hidden="true" data-cursor></div>
 
     <x-navbar />
 
@@ -89,6 +92,8 @@
     </main>
 
     <x-footer />
+
+    <x-whatsapp-float />
 
     @stack('scripts')
 </body>

@@ -67,7 +67,7 @@
             <div data-aos="fade-up">
                 <h2 class="section-title">Expertise stratégique</h2>
                 <p class="mt-4 text-ink/60">
-                    Plus de 12 ans d'expérience cumulée en conseil, communication, marketing digital et développement
+                    {{ $entreprise->anciennete() }} ans d'expérience, depuis {{ $entreprise->anneeCreation() }}, en conseil, communication, marketing digital et développement
                     de solutions numériques, au service d'entreprises et d'institutions en Afrique.
                 </p>
             </div>
@@ -75,6 +75,7 @@
     </div>
 </section>
 
+@if($team->isNotEmpty())
 <section class="bg-paper py-24">
     <div class="mx-auto max-w-7xl px-6">
         <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
@@ -85,11 +86,11 @@
             @foreach($team as $member)
                 <div class="rounded-2xl bg-white p-6 text-center shadow-sm" data-aos="fade-up">
                     @if($member->photo_url)
-                        <img src="{{ $member->photo_url }}" alt="{{ $member->name }}" width="96" height="96" loading="lazy" class="mx-auto h-24 w-24 rounded-full object-cover">
+                        <img src="{{ $member->photo_url }}" alt="{{ $member->display_name }}" width="96" height="96" loading="lazy" class="mx-auto h-24 w-24 rounded-full object-cover">
                     @else
                         <div class="mx-auto h-24 w-24 rounded-full bg-ink/5"></div>
                     @endif
-                    <h3 class="mt-4 font-bold text-ink">{{ $member->name }}</h3>
+                    <h3 class="mt-4 font-bold text-ink">{{ $member->display_name }}</h3>
                     <p class="text-sm text-ink/60">{{ $member->role }}</p>
                     @if($member->bio)
                         <p class="mt-2 text-sm text-ink/60">{{ $member->bio }}</p>
@@ -99,6 +100,7 @@
         </div>
     </div>
 </section>
+@endif
 
 <x-cta-band title="Construisons ensemble votre prochain chapitre" />
 

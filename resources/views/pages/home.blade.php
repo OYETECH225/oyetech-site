@@ -8,12 +8,13 @@
 @endphp
 
 @php
-    $heroWords = json_decode(\App\Models\Setting::get('hero_rotating_words', '["solutions digitales","stratégies gagnantes","produits innovants"]'), true);
+    $heroTitle = \App\Models\Setting::get('hero_title', 'Stratégie, communication et solutions digitales pour faire grandir les entreprises africaines');
     $heroBadge = \App\Models\Setting::get('hero_badge', 'Agence Digitale · Abidjan · Côte d\'Ivoire');
     $heroSubtitle = \App\Models\Setting::get('hero_subtitle', 'Cabinet stratégique et agence digitale 360°, OYETECH accompagne les entreprises et institutions de référence dans leur transformation et leur croissance.');
     $heroStats = [
         [\App\Models\Setting::get('stat_projects', '120+'), \App\Models\Setting::get('stat_projects_label', 'Projets livrés')],
-        [\App\Models\Setting::get('stat_experience', '12+'), \App\Models\Setting::get('stat_experience_label', 'Années d\'expertise')],
+        // Ancienneté calculée depuis l'année de création (config/entreprise.php), jamais saisie à la main
+        [$entreprise->anciennete(), 'Années d\'expertise'],
         [\App\Models\Setting::get('stat_satisfaction', '98%'), \App\Models\Setting::get('stat_satisfaction_label', 'Satisfaction client')],
     ];
     $ctaTitle    = \App\Models\Setting::get('cta_title', 'Prêt à transformer votre ambition en résultats ?');
@@ -26,15 +27,7 @@
 {{-- ============================================================
      HERO — fond noir + grille de points
      ============================================================ --}}
-<section class="relative flex min-h-screen items-center overflow-hidden bg-navy text-white" data-reveal-group
-    x-data x-init="
-        const words = document.querySelectorAll('[id^=hero-word-]');
-        const tl = gsap.timeline({ repeat: -1, delay: 1 });
-        words.forEach((el) => {
-            tl.to(el, { opacity: 1, y: 0, duration: 0.6 })
-              .to(el, { opacity: 0, y: -20, duration: 0.6, delay: 1.6 });
-        });
-    ">
+<section class="relative flex min-h-screen items-center overflow-hidden bg-navy text-white" data-reveal-group>
 
     {{-- Blobs morphants CSS --}}
     <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -60,13 +53,7 @@
                 </span>
 
                 <h1 class="font-display text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl xl:text-[3.5rem]" data-reveal>
-                    Nous créons des<br>
-                    <span class="relative inline-block h-[1.2em] min-w-[8rem] align-bottom">
-                        @foreach($heroWords as $i => $word)
-                            <span id="hero-word-{{ $i + 1 }}" class="-translate-y-5 absolute left-0 top-0 whitespace-nowrap opacity-0 text-white">{{ $word }}</span>
-                        @endforeach
-                    </span>
-                    <br>pour l'Afrique
+                    {{ $heroTitle }}
                 </h1>
 
                 <p class="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" data-reveal>
@@ -90,7 +77,8 @@
             {{-- Tableau de bord flottant (droite) --}}
             <div class="relative hidden lg:block" data-reveal>
                 {{-- Carte principale --}}
-                <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-navy-light/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-sm">
+                <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-navy-light/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-sm"
+                    role="img" aria-label="Illustration d'un tableau de bord de suivi de projets (données fictives)">
                     {{-- Barre de titre --}}
                     <div class="mb-5 flex items-center justify-between">
                         <div class="flex items-center gap-2">
@@ -98,7 +86,7 @@
                             <span class="h-3 w-3 rounded-full bg-white/25"></span>
                             <span class="h-3 w-3 rounded-full bg-white/15"></span>
                         </div>
-                        <span class="text-xs font-medium text-white/30">dashboard.oyetech.ci</span>
+                        <span class="rounded-full border border-white/25 bg-white/10 px-2.5 py-0.5 text-[11px] font-semibold uppercase tracking-wider text-white/85">Illustration</span>
                     </div>
 
                     {{-- Graphique en barres --}}
@@ -112,7 +100,7 @@
 
                     {{-- Statistiques --}}
                     <div class="mb-4 grid grid-cols-3 gap-3">
-                        @foreach([['120+', 'Projets'], ['98%', 'Satisfaits'], ['12+', 'Années']] as [$v, $l])
+                        @foreach([[$heroStats[0][0], 'Projets'], [$heroStats[2][0], 'Satisfaits'], [$entreprise->anciennete(), 'Années']] as [$v, $l])
                             <div class="rounded-xl border border-white/10 bg-white/6 p-3 text-center">
                                 <p class="font-display text-xl font-extrabold text-white">{{ $v }}</p>
                                 <p class="mt-0.5 text-[10px] text-white/35">{{ $l }}</p>
@@ -253,19 +241,11 @@
                         ['value' => 120, 'suffix' => '+', 'label' => 'Projets livrés'],
                         ['value' => 5,   'suffix' => '',  'label' => 'Pôles d\'expertise'],
                         ['value' => 98,  'suffix' => '%', 'label' => 'Clients satisfaits'],
-                        ['value' => 12,  'suffix' => '+', 'label' => 'Années d\'expertise'],
+                        ['value' => $entreprise->anciennete(), 'suffix' => '', 'label' => 'Années d\'expertise'],
                     ] as $stat)
-                        <div x-data="{ count: 0, target: {{ $stat['value'] }} }" x-init="
-                            let started = false;
-                            const step = (ts, start) => {
-                                const progress = Math.min((ts - start) / 1200, 1);
-                                count = Math.floor(progress * target);
-                                if (progress < 1) requestAnimationFrame((t) => step(t, start));
-                            };
-                            ScrollTrigger.create({ trigger: $el, start: 'top 90%', once: true, onEnter: () => { if (!started) { started = true; requestAnimationFrame((t) => step(t, t)); } } });
-                        " class="rounded-2xl border border-white/10 bg-white/6 p-6 text-center">
+                        <div x-data="countUp({{ $stat['value'] }})" class="rounded-2xl border border-white/10 bg-white/6 p-6 text-center">
                             <p class="font-display text-4xl font-extrabold sm:text-5xl">
-                                <span class="text-white" x-text="count"></span><span class="text-white">{{ $stat['suffix'] }}</span>
+                                <span class="text-white" x-text="count">{{ $stat['value'] }}</span><span class="text-white">{{ $stat['suffix'] }}</span>
                             </p>
                             <p class="mt-2 text-xs text-white/50">{{ $stat['label'] }}</p>
                         </div>
@@ -275,11 +255,11 @@
                     <span class="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white/15">
                         <svg class="h-5 w-5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg>
                     </span>
-                    <p class="text-sm font-medium text-white/70">Partenaire de confiance depuis 2012</p>
+                    <p class="text-sm font-medium text-white/70">Partenaire de confiance depuis {{ $entreprise->anneeCreation() }}</p>
                 </div>
             </div>
             <div class="absolute -bottom-5 -right-5 flex items-center gap-3 rounded-2xl border border-ink/10 bg-white px-5 py-4 shadow-xl">
-                <span class="font-display text-2xl font-extrabold text-ink">12+</span>
+                <span class="font-display text-2xl font-extrabold text-ink">{{ $entreprise->anciennete() }}</span>
                 <span class="max-w-[7rem] text-xs font-medium leading-tight text-ink/60">années d'expertise au service de nos clients</span>
             </div>
         </div>
@@ -341,21 +321,13 @@
                 ['label' => 'Projets livrés dans les délais', 'value' => 95],
                 ['label' => 'Taux de renouvellement des contrats', 'value' => 90],
             ] as $bar)
-                <div data-reveal x-data="{ count: 0, target: {{ $bar['value'] }} }" x-init="
-                    let started = false;
-                    const step = (ts, start) => {
-                        const progress = Math.min((ts - start) / 1200, 1);
-                        count = Math.floor(progress * target);
-                        if (progress < 1) requestAnimationFrame((t) => step(t, start));
-                    };
-                    ScrollTrigger.create({ trigger: $el, start: 'top 90%', once: true, onEnter: () => { if (!started) { started = true; requestAnimationFrame((t) => step(t, t)); } } });
-                ">
+                <div data-reveal x-data="countUp({{ $bar['value'] }})">
                     <div class="mb-3 flex items-baseline justify-between">
                         <p class="text-sm font-medium text-white/70">{{ $bar['label'] }}</p>
-                        <p class="font-display text-lg font-bold"><span class="text-white" x-text="count"></span><span class="text-white">%</span></p>
+                        <p class="font-display text-lg font-bold"><span class="text-white" x-text="count">{{ $bar['value'] }}</span><span class="text-white">%</span></p>
                     </div>
                     <div class="h-2.5 overflow-hidden rounded-full bg-white/10">
-                        <div class="h-full rounded-full bg-white transition-all duration-1000" :style="`width: ${count}%`"></div>
+                        <div class="h-full rounded-full bg-white transition-all duration-1000" style="width: {{ $bar['value'] }}%" :style="`width: ${count}%`"></div>
                     </div>
                 </div>
             @endforeach
@@ -535,14 +507,14 @@
             @foreach($team as $member)
                 <div data-reveal class="group rounded-2xl border border-ink/8 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-2 hover:border-ink/20 hover:shadow-xl hover:shadow-black/5">
                     @if($member->photo_url)
-                        <img src="{{ $member->photo_url }}" alt="{{ $member->name }}" width="96" height="96" loading="lazy"
+                        <img src="{{ $member->photo_url }}" alt="{{ $member->display_name }}" width="96" height="96" loading="lazy"
                             class="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-ink/5 transition group-hover:ring-ink/15">
                     @else
                         <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-ink">
-                            <span class="font-display text-2xl font-extrabold text-white/80">{{ mb_substr($member->name, 0, 1) }}</span>
+                            <span class="font-display text-2xl font-extrabold text-white/80">{{ $member->initials }}</span>
                         </div>
                     @endif
-                    <h3 class="mt-4 font-display font-bold text-ink">{{ $member->name }}</h3>
+                    <h3 class="mt-4 font-display font-bold text-ink">{{ $member->display_name }}</h3>
                     <p class="text-sm font-medium text-ink/50">{{ $member->role }}</p>
                 </div>
             @endforeach
@@ -567,12 +539,7 @@
             <span class="section-badge mb-4 inline-flex">FAQ</span>
             <h2 class="section-title">Questions <span class="gradient-text">fréquentes</span></h2>
         </div>
-        <x-faq :items="[
-            ['q' => 'Quels types d\'entreprises accompagnez-vous ?', 'a' => 'Nous travaillons avec des PME, grandes entreprises, institutions publiques et startups, en Afrique.'],
-            ['q' => 'Combien de temps dure une mission type ?', 'a' => 'Cela dépend du pôle et du périmètre : de quelques semaines pour une campagne de communication à plusieurs mois pour une transformation digitale complète.'],
-            ['q' => 'Travaillez-vous avec des clients hors de Côte d\'Ivoire ?', 'a' => 'Oui. Notre agence est implantée à Abidjan, mais nous intervenons auprès de clients partout en Afrique, à distance ou avec des déplacements ponctuels selon les besoins.'],
-            ['q' => 'Comment se déroule la première prise de contact ?', 'a' => 'Vous remplissez le formulaire de contact ou réservez un créneau via Calendly. Notre équipe revient vers vous en moins de 48h pour cadrer votre besoin.'],
-        ]" />
+        <x-faq :items="app(\App\Services\Faq::class)->accueil()" />
     </div>
 </section>
 

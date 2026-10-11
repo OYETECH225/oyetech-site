@@ -75,11 +75,7 @@
             <h2 class="section-title">Questions fréquentes</h2>
         </div>
         <div class="mt-12">
-            <x-faq :items="[
-                ['q' => 'Comment se déroule le démarrage d\'une mission '.$service->name.' ?', 'a' => 'Un premier échange permet de cadrer vos objectifs et votre contexte. Nous proposons ensuite une feuille de route avec un périmètre et un calendrier clairs.'],
-                ['q' => 'Travaillez-vous avec des entreprises de toute taille ?', 'a' => 'Oui, nos méthodes s\'adaptent aussi bien aux startups qu\'aux grandes entreprises et institutions.'],
-                ['q' => 'Peut-on combiner ce pôle avec d\'autres expertises OYETECH ?', 'a' => 'Tout à fait, c\'est même notre approche par défaut : nos pôles travaillent ensemble dès que votre projet le nécessite.'],
-            ]" />
+            <x-faq :items="app(\App\Services\Faq::class)->pole($service->name)" />
         </div>
     </div>
 </section>

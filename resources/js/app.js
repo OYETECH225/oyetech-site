@@ -13,9 +13,36 @@ window.Alpine = Alpine;
 window.gsap = gsap;
 window.ScrollTrigger = ScrollTrigger;
 
-Alpine.start();
-
 const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+/**
+ * Compteur animé en amélioration progressive : la valeur finale est rendue côté serveur
+ * (visible sans JavaScript) ; l'animation 0 → valeur ne se joue qu'à l'entrée dans l'écran.
+ */
+Alpine.data('countUp', (target) => ({
+    count: target,
+    init() {
+        if (prefersReducedMotion) return;
+
+        ScrollTrigger.create({
+            trigger: this.$el,
+            start: 'top 90%',
+            once: true,
+            onEnter: () => {
+                const start = performance.now();
+                const step = (now) => {
+                    const progress = Math.min((now - start) / 1200, 1);
+                    this.count = Math.floor(progress * target);
+                    if (progress < 1) requestAnimationFrame(step);
+                };
+                this.count = 0;
+                requestAnimationFrame(step);
+            },
+        });
+    },
+}));
+
+Alpine.start();
 
 document.addEventListener('DOMContentLoaded', () => {
     AOS.init({ duration: 700, once: true, offset: 80, disable: prefersReducedMotion });

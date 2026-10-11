@@ -25,17 +25,13 @@ class ManageSettings extends Page implements HasForms
 
     public function mount(): void
     {
-        $words = json_decode(Setting::get('hero_rotating_words', '["solutions digitales","stratégies gagnantes","produits innovants"]'), true);
-
         $this->form->fill([
             'hero_badge'    => Setting::get('hero_badge', 'Agence Digitale · Abidjan · Côte d\'Ivoire'),
             'hero_subtitle' => Setting::get('hero_subtitle', 'Cabinet stratégique et agence digitale 360°, OYETECH accompagne les entreprises et institutions de référence dans leur transformation et leur croissance.'),
-            'hero_rotating_words' => $words,
+            'hero_title'    => Setting::get('hero_title', 'Stratégie, communication et solutions digitales pour faire grandir les entreprises africaines'),
 
             'stat_projects'           => Setting::get('stat_projects', '120+'),
             'stat_projects_label'     => Setting::get('stat_projects_label', 'Projets livrés'),
-            'stat_experience'          => Setting::get('stat_experience', '12+'),
-            'stat_experience_label'    => Setting::get('stat_experience_label', 'Années d\'expertise'),
             'stat_satisfaction'       => Setting::get('stat_satisfaction', '98%'),
             'stat_satisfaction_label' => Setting::get('stat_satisfaction_label', 'Satisfaction client'),
 
@@ -48,10 +44,6 @@ class ManageSettings extends Page implements HasForms
     public function save(): void
     {
         $data = $this->form->getState();
-
-        if (isset($data['hero_rotating_words']) && is_array($data['hero_rotating_words'])) {
-            $data['hero_rotating_words'] = json_encode(array_values($data['hero_rotating_words']));
-        }
 
         foreach ($data as $key => $value) {
             Setting::set($key, $value ?? '');
@@ -76,21 +68,20 @@ class ManageSettings extends Page implements HasForms
                             ->label('Sous-titre')
                             ->rows(3)
                             ->columnSpanFull(),
-                        Forms\Components\TagsInput::make('hero_rotating_words')
-                            ->label('Mots rotatifs animés')
-                            ->helperText('Les mots qui s\'alternent dans le titre principal du hero.')
+                        Forms\Components\Textarea::make('hero_title')
+                            ->label('Titre principal (H1)')
+                            ->rows(2)
+                            ->maxLength(160)
                             ->columnSpanFull(),
                     ])
                     ->columns(1),
 
                 Forms\Components\Section::make('Statistiques')
                     ->icon('heroicon-o-chart-bar')
-                    ->description('Les 3 chiffres clés affichés dans le hero et la section "Pourquoi OYETECH".')
+                    ->description('Chiffres clés affichés dans le hero. Les années d\'expertise sont calculées automatiquement depuis l\'année de création (config/entreprise.php).')
                     ->schema([
                         Forms\Components\TextInput::make('stat_projects')->label('Valeur — Projets')->placeholder('120+'),
                         Forms\Components\TextInput::make('stat_projects_label')->label('Label — Projets')->placeholder('Projets livrés'),
-                        Forms\Components\TextInput::make('stat_experience')->label('Valeur — Expertise')->placeholder('12+'),
-                        Forms\Components\TextInput::make('stat_experience_label')->label('Label — Expertise')->placeholder('Années d\'expertise'),
                         Forms\Components\TextInput::make('stat_satisfaction')->label('Valeur — Satisfaction')->placeholder('98%'),
                         Forms\Components\TextInput::make('stat_satisfaction_label')->label('Label — Satisfaction')->placeholder('Satisfaction client'),
                     ])

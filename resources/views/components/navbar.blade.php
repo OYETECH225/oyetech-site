@@ -57,6 +57,13 @@
             <a href="{{ route('portfolio.index') }}" class="block rounded-xl px-4 py-3 text-white/70 hover:bg-white/5 hover:text-white">Réalisations</a>
             <a href="{{ route('blog.index') }}" class="block rounded-xl px-4 py-3 text-white/70 hover:bg-white/5 hover:text-white">Insights</a>
             <a href="{{ route('contact') }}" class="btn-invert mt-3 block text-center">Démarrer un projet</a>
+            @if($entreprise->whatsappUrl())
+                <a href="{{ $entreprise->whatsappUrl() }}" target="_blank" rel="noopener"
+                    class="btn-outline-light mt-3 flex items-center justify-center gap-2">
+                    <x-whatsapp-icon />
+                    Écrire sur WhatsApp
+                </a>
+            @endif
         </div>
     </div>
 </header>

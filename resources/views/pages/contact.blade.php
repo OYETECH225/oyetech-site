@@ -96,10 +96,27 @@
             <div>
                 <h2 class="section-title">Nos coordonnées</h2>
                 <ul class="mt-6 space-y-3 text-ink/60">
-                    <li>Abidjan, Côte d'Ivoire</li>
-                    <li><a href="mailto:contact@oyetech.ci" class="hover:text-ink">contact@oyetech.ci</a></li>
-                    <li><a href="tel:+2250000000000" class="hover:text-ink">+225 00 00 00 00 00</a></li>
+                    <li>{{ $entreprise->adresse() }}</li>
+                    <li><a href="mailto:{{ $entreprise->email() }}" class="hover:text-ink">{{ $entreprise->email() }}</a></li>
+                    @if($entreprise->telephone())
+                        <li><a href="{{ $entreprise->telephoneHref() }}" class="hover:text-ink">{{ $entreprise->telephone() }}</a></li>
+                    @endif
                 </ul>
+                @if($entreprise->whatsappUrl() || $entreprise->calendly())
+                    <div class="mt-6 flex flex-wrap gap-3">
+                        @if($entreprise->whatsappUrl())
+                            <a href="{{ $entreprise->whatsappUrl() }}" target="_blank" rel="noopener" class="btn-dark inline-flex items-center gap-2">
+                                <x-whatsapp-icon />
+                                Écrire sur WhatsApp
+                            </a>
+                        @endif
+                        @if($entreprise->calendly())
+                            <a href="{{ $entreprise->calendly() }}" target="_blank" rel="noopener" class="btn-outline-dark inline-flex">
+                                Réserver un créneau sur Calendly
+                            </a>
+                        @endif
+                    </div>
+                @endif
             </div>
 
             <div>
@@ -107,12 +124,11 @@
                 <div class="mt-6 overflow-hidden rounded-2xl border border-ink/10">
                     <iframe
                         title="Localisation des bureaux OYETECH à Abidjan"
-                        src="https://maps.google.com/maps?q=Abidjan%2C%20C%C3%B4te%20d%27Ivoire&t=&z=13&ie=UTF8&iwloc=&output=embed"
+                        src="https://maps.google.com/maps?q={{ rawurlencode($entreprise->adresse()) }}&t=&z=13&ie=UTF8&iwloc=&output=embed"
                         class="h-[350px] w-full"
                         loading="lazy"
                         referrerpolicy="no-referrer-when-downgrade"></iframe>
                 </div>
-                <p class="mt-2 text-xs text-ink/45">Localisation indicative — adresse exacte des bureaux à venir.</p>
             </div>
 
             @if(config('services.calendly.url'))

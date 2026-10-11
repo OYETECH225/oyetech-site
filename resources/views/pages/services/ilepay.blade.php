@@ -116,30 +116,14 @@
     </div>
 </section>
 
-<section class="bg-paper py-24" x-data="{ open: null }">
+<section class="bg-paper py-24">
     <div class="mx-auto max-w-3xl px-6">
         <div class="mx-auto max-w-2xl text-center" data-aos="fade-up">
             <h2 class="section-title">Questions fréquentes</h2>
         </div>
 
-        <div class="mt-12 space-y-4">
-            @foreach([
-                ['q' => 'Quels paiements puis-je effectuer avec Ilepay ?', 'a' => 'Ilepay permet le paiement des loyers, charges et frais de contrat de location, par carte bancaire ou mobile money.'],
-                ['q' => 'Qui peut utiliser Ilepay ?', 'a' => 'Ilepay s\'adresse aux propriétaires individuels, aux agences et gestionnaires de biens immobiliers, ainsi qu\'aux locataires en Côte d\'Ivoire.'],
-                ['q' => 'Combien de temps prend l\'intégration pour une agence ?', 'a' => 'La mise en place se fait généralement en quelques jours, avec l\'accompagnement de notre équipe pour la reprise des contrats existants.'],
-                ['q' => 'Ilepay est-il sécurisé ?', 'a' => 'Oui, Ilepay respecte les standards de sécurité du secteur (chiffrement des transactions, conformité PCI-DSS des partenaires bancaires).'],
-                ['q' => 'Ilepay proposera-t-il d\'autres paiements à l\'avenir ?', 'a' => 'Oui, Ilepay a vocation à évoluer progressivement pour faciliter d\'autres types de paiements et de services financiers du quotidien, avec une gestion centralisée des transactions et des justificatifs.'],
-            ] as $i => $faq)
-                <div class="rounded-xl bg-white shadow-sm" data-aos="fade-up">
-                    <button @click="open = open === {{ $i }} ? null : {{ $i }}" class="flex w-full items-center justify-between px-6 py-4 text-left font-semibold text-ink">
-                        {{ $faq['q'] }}
-                        <svg class="h-5 w-5 transition" :class="open === {{ $i }} ? 'rotate-180' : ''" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                    </button>
-                    <div x-show="open === {{ $i }}" x-collapse class="px-6 pb-4 text-sm text-ink/60">
-                        {{ $faq['a'] }}
-                    </div>
-                </div>
-            @endforeach
+        <div class="mt-12">
+            <x-faq :items="app(\App\Services\Faq::class)->ilepay()" />
         </div>
     </div>
 </section>

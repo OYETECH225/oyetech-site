@@ -248,16 +248,27 @@
     .has-custom-cursor { cursor: auto; }
   }
 
-  /* Cible des reveals au scroll pilotés par GSAP ScrollTrigger (app.js) */
-  [data-reveal] {
+  /* Cible des reveals au scroll pilotés par GSAP ScrollTrigger (app.js).
+     Masqués seulement si JavaScript tourne (classe .js posée dans le <head>) :
+     sans JS, robots et lecteurs voient tout le contenu rendu côté serveur. */
+  .js [data-reveal] {
     opacity: 0;
     transform: translateY(28px);
   }
 
   [data-reveal-word] {
     display: inline-block;
+  }
+
+  .js [data-reveal-word] {
     opacity: 0;
     transform: translateY(0.4em);
+  }
+
+  /* Même principe pour AOS, dont la feuille de style masque [data-aos] sans condition */
+  html:not(.js) [data-aos] {
+    opacity: 1 !important;
+    transform: none !important;
   }
 
   @media (prefers-reduced-motion: reduce) {
