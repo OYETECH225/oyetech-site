@@ -47,8 +47,6 @@
 
     <x-cookie-banner />
 
-    <div class="cursor-ring" aria-hidden="true" data-cursor></div>
-
     <x-navbar />
 
     <main id="contenu" tabindex="-1" class="focus:outline-none">

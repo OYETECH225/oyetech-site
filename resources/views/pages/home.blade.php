@@ -61,14 +61,14 @@
                 </p>
 
                 <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
-                    <a href="{{ route('contact') }}" class="btn-invert magnetic">Démarrer un projet</a>
+                    <a href="{{ route('contact') }}" class="btn-invert">Démarrer un projet</a>
                 </div>
 
                 <div class="mt-10 flex flex-wrap gap-8 border-t border-white/10 pt-8" data-reveal>
                     @foreach($heroStats as [$val, $label])
                         <div>
                             <p class="font-display text-3xl font-extrabold text-white">{{ $val }}</p>
-                            <p class="mt-0.5 text-xs text-white/45">{{ $label }}</p>
+                            <p class="mt-0.5 text-xs text-white/60">{{ $label }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -166,7 +166,7 @@
                 ['icon' => 'heroicon-o-shield-check', 'num' => '03', 'title' => 'Engagement de résultats', 'text' => 'Nous nous engageons sur des objectifs, pas seulement des livrables.', 'link' => route('contact')],
             ] as $feature)
                 <a href="{{ $feature['link'] }}" data-reveal
-                    class="magnetic group relative overflow-hidden rounded-2xl border border-ink/8 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-ink/20 hover:shadow-xl hover:shadow-black/5">
+                    class="group relative overflow-hidden rounded-2xl border border-ink/8 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-ink/20 hover:shadow-xl hover:shadow-black/5">
                     {{-- Numéro décoratif --}}
                     <span class="absolute right-6 top-6 font-display text-5xl font-extrabold text-ink/4 transition group-hover:text-ink/6">{{ $feature['num'] }}</span>
                     {{-- Icône --}}
@@ -207,7 +207,7 @@
                             <p class="font-display text-4xl font-extrabold sm:text-5xl">
                                 <span class="text-white" x-text="count">{{ $stat['value'] }}</span><span class="text-white">{{ $stat['suffix'] }}</span>
                             </p>
-                            <p class="mt-2 text-xs text-white/50">{{ $stat['label'] }}</p>
+                            <p class="mt-2 text-xs text-white/60">{{ $stat['label'] }}</p>
                         </div>
                     @endforeach
                 </div>
@@ -254,8 +254,8 @@
             </ul>
 
             <div class="mt-10 flex flex-wrap gap-4" data-reveal>
-                <a href="{{ route('about') }}" class="btn-primary magnetic">En savoir plus</a>
-                <a href="{{ route('contact') }}" class="btn-outline-dark magnetic">Parlons de votre projet</a>
+                <a href="{{ route('about') }}" class="btn-primary">En savoir plus</a>
+                <a href="{{ route('contact') }}" class="btn-outline-dark">Parlons de votre projet</a>
             </div>
         </div>
     </div>
@@ -306,7 +306,7 @@
                     <h3 class="font-display text-2xl font-extrabold sm:text-3xl">{{ $first->name }}</h3>
                     <p class="mt-3 max-w-xl text-white/70">{{ $first->summary }}</p>
                 </div>
-                <span class="relative shrink-0 rounded-full border border-white/30 bg-white/10 px-7 py-3 font-semibold text-white backdrop-blur-sm transition group-hover:bg-white/20 magnetic">Découvrir</span>
+                <span class="relative shrink-0 rounded-full border border-white/30 bg-white/10 px-7 py-3 font-semibold text-white backdrop-blur-sm transition group-hover:bg-white/20">Découvrir</span>
             </a>
         @endif
 
@@ -361,7 +361,7 @@
     </div>
 
     <div class="mt-10 text-center" data-reveal>
-        <a href="{{ route('portfolio.index') }}" class="btn-primary magnetic inline-flex">Voir tous les projets</a>
+        <a href="{{ route('portfolio.index') }}" class="btn-primary inline-flex">Voir tous les projets</a>
     </div>
 </section>
 
@@ -389,7 +389,7 @@
         </div>
 
         <div class="mt-10 text-center" data-reveal>
-            <a href="{{ route('about') }}" class="btn-outline-dark magnetic inline-flex items-center gap-2">
+            <a href="{{ route('about') }}" class="btn-outline-dark inline-flex items-center gap-2">
                 Voir toute l'équipe
                 <svg class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
             </a>

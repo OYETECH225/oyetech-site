@@ -216,45 +216,6 @@
     100% { transform: translate(0, 0)   scale(1);    }
   }
 
-  /* Effet magnétique piloté par app.js (mousemove → transform) */
-  .magnetic {
-    will-change: transform;
-    transition: transform 0.2s ease-out;
-  }
-
-  /* Curseur personnalisé — desktop uniquement, voir app.js pour l'activation conditionnelle */
-  .has-custom-cursor {
-    cursor: none;
-  }
-
-  .cursor-ring {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 32px;
-    height: 32px;
-    margin: -16px 0 0 -16px;
-    border-radius: 9999px;
-    border: 1px solid rgba(255, 255, 255, 0.9);
-    mix-blend-mode: difference;
-    pointer-events: none;
-    z-index: 9999;
-    transition: width 0.25s ease, height 0.25s ease, margin 0.25s ease, opacity 0.25s ease;
-    will-change: transform;
-  }
-
-  .cursor-ring.is-active {
-    width: 56px;
-    height: 56px;
-    margin: -28px 0 0 -28px;
-    background: rgba(255, 255, 255, 0.9);
-  }
-
-  @media (pointer: coarse), (prefers-reduced-motion: reduce) {
-    .cursor-ring { display: none; }
-    .has-custom-cursor { cursor: auto; }
-  }
-
   /* Cible des reveals au scroll pilotés par GSAP ScrollTrigger (app.js).
      Masqués seulement si JavaScript tourne (classe .js posée dans le <head>) :
      sans JS, robots et lecteurs voient tout le contenu rendu côté serveur. */

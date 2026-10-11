@@ -47,7 +47,7 @@
 
 <section class="bg-white py-24">
     <div class="mx-auto max-w-3xl px-6">
-        <p class="text-sm text-ink/45" data-reveal>{{ $article->published_at?->translatedFormat('d F Y') }}</p>
+        <p class="text-sm text-ink/60" data-reveal>{{ $article->published_at?->translatedFormat('d F Y') }}</p>
 
         <div class="prose prose-neutral drop-cap mt-8 max-w-none prose-headings:font-display prose-headings:tracking-tight prose-a:text-ink prose-a:underline prose-blockquote:font-display prose-blockquote:border-ink prose-blockquote:text-2xl prose-blockquote:font-bold prose-blockquote:not-italic prose-blockquote:text-ink"
             data-reveal>

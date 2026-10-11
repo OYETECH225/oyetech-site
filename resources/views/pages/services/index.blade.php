@@ -19,7 +19,7 @@
         <div class="grid gap-8 sm:grid-cols-2 lg:grid-cols-3" data-reveal-group>
             @foreach($services as $service)
                 <a href="{{ $service->url }}" data-reveal
-                    class="magnetic group relative block overflow-hidden rounded-3xl border border-ink/10 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-2xl motion-reduce:transition-none">
+                    class="group relative block overflow-hidden rounded-3xl border border-ink/10 bg-white transition duration-300 hover:-translate-y-1 hover:shadow-2xl motion-reduce:transition-none">
                     <div class="sunburst-bg grain relative flex h-40 items-center justify-center overflow-hidden bg-ink">
                         <x-dynamic-component :component="$service->icon ?? 'heroicon-o-sparkles'" class="h-12 w-12 text-white/30 transition-transform duration-300 group-hover:scale-110" />
                         <span class="absolute -bottom-5 right-6 flex h-12 w-12 items-center justify-center rounded-full bg-white text-ink shadow-lg transition-transform duration-300 group-hover:rotate-45">

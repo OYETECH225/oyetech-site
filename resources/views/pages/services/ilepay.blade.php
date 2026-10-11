@@ -23,8 +23,8 @@
         </h1>
         <p class="mx-auto mt-6 max-w-2xl text-lg text-white/60" data-reveal>{{ $service->summary }}</p>
         <div class="mt-10 flex flex-wrap items-center justify-center gap-4" data-reveal>
-            <a href="#demo" class="btn-invert magnetic">Demander une démo</a>
-            <a href="{{ route('contact') }}" class="btn-outline-light magnetic">Parler à un expert</a>
+            <a href="#demo" class="btn-invert">Demander une démo</a>
+            <a href="{{ route('contact') }}" class="btn-outline-light">Parler à un expert</a>
         </div>
     </div>
 </section>

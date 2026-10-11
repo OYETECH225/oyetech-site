@@ -1,7 +1,7 @@
 @props(['service'])
 
 <a href="{{ $service->url }}"
-    class="magnetic group relative block overflow-hidden rounded-2xl border border-ink/8 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-ink/20 hover:shadow-xl hover:shadow-black/5"
+    class="group relative block overflow-hidden rounded-2xl border border-ink/8 bg-white p-8 shadow-sm transition duration-300 hover:-translate-y-2 hover:border-ink/20 hover:shadow-xl hover:shadow-black/5"
     data-reveal>
     <div class="mb-5 flex h-14 w-14 items-center justify-center rounded-2xl bg-ink/6 text-ink transition-all duration-300 group-hover:bg-ink group-hover:text-white group-hover:scale-110 group-hover:shadow-lg group-hover:shadow-black/20">
         <x-dynamic-component :component="$service->icon ?? 'heroicon-o-sparkles'" class="h-7 w-7" />

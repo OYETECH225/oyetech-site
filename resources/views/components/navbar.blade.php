@@ -46,7 +46,7 @@
         </div>
 
         <div class="hidden lg:block">
-            <a href="{{ route('contact') }}" class="btn-invert magnetic">Démarrer un projet</a>
+            <a href="{{ route('contact') }}" class="btn-invert">Démarrer un projet</a>
         </div>
 
         <button @click="open = !open" :aria-expanded="open" aria-label="Menu" aria-controls="mobile-menu"

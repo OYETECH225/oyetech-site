@@ -18,14 +18,14 @@
                         <img src="{{ asset('images/logo-full.png') }}" alt="OYETECH" width="535" height="107" loading="lazy" decoding="async" class="h-7 w-auto brightness-0 invert">
                     </picture>
                 </a>
-                <p class="mt-4 text-sm leading-relaxed text-white/50">
+                <p class="mt-4 text-sm leading-relaxed text-white/60">
                     Agence digitale et cabinet stratégique basé à Abidjan, au service des entreprises et institutions en Afrique.
                 </p>
                 @if($reseaux)
                     <div class="mt-6 flex gap-3">
                         @foreach($reseaux as $key => $reseau)
                             <a href="{{ $reseau['url'] }}" target="_blank" rel="noopener" aria-label="OYETECH sur {{ $reseau['label'] }} (nouvel onglet)"
-                                class="flex h-9 w-9 items-center justify-center rounded-full border border-white/10 text-white/35 transition hover:border-white/30 hover:bg-white/8 hover:text-white/70">
+                                class="flex h-9 w-9 items-center justify-center rounded-full border border-white/15 text-white/60 transition hover:border-white/30 hover:bg-white/8 hover:text-white/70">
                                 {!! $socialIcons[$key] !!}
                             </a>
                         @endforeach

@@ -12,7 +12,7 @@
 <section class="bg-paper py-28">
     <div class="mx-auto max-w-6xl px-6">
         <div class="mx-auto max-w-2xl text-center" data-reveal>
-            <span class="mb-4 inline-block rounded-full border border-ink/15 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-ink/45">
+            <span class="mb-4 inline-block rounded-full border border-ink/15 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-ink/60">
                 Notre méthode
             </span>
             <h2 class="section-title">Nos prestations</h2>
@@ -43,7 +43,7 @@
 <section class="bg-white py-28">
     <div class="mx-auto max-w-7xl px-6">
         <div class="mx-auto max-w-2xl text-center" data-reveal>
-            <span class="mb-4 inline-block rounded-full border border-ink/15 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-ink/45">
+            <span class="mb-4 inline-block rounded-full border border-ink/15 px-4 py-1 text-xs font-semibold uppercase tracking-widest text-ink/60">
                 Preuves par l'exemple
             </span>
             <h2 class="section-title">Cas clients</h2>
@@ -68,7 +68,7 @@
                 <h3 class="font-display text-xl font-bold">Une question sur {{ $service->name }} ?</h3>
                 <p class="mt-2 text-white/60">Notre équipe vous répond en moins de 48h, sans engagement.</p>
             </div>
-            <a href="{{ route('contact') }}" class="btn-invert magnetic shrink-0">Nous contacter</a>
+            <a href="{{ route('contact') }}" class="btn-invert shrink-0">Nous contacter</a>
         </div>
     </div>
 </section>
@@ -88,7 +88,7 @@
 @if($otherServices->isNotEmpty())
 <section class="bg-paper py-16">
     <div class="mx-auto max-w-7xl px-6 text-center" data-reveal>
-        <p class="text-xs font-semibold uppercase tracking-wider text-ink/45">Découvrez nos autres pôles</p>
+        <p class="text-xs font-semibold uppercase tracking-wider text-ink/60">Découvrez nos autres pôles</p>
         <div class="mt-6 flex flex-wrap justify-center gap-3">
             @foreach($otherServices as $other)
                 <a href="{{ $other->url }}" class="rounded-full border border-ink/15 bg-white px-4 py-2 text-sm font-medium text-ink/70 transition-colors hover:border-ink hover:text-ink">

@@ -54,8 +54,6 @@ document.addEventListener('DOMContentLoaded', () => {
     initRevealGroups();
     initWordReveal();
     initParallax();
-    initMagnetic();
-    initCustomCursor();
 });
 
 /**
@@ -151,62 +149,5 @@ function initParallax() {
                 scrub: true,
             },
         });
-    });
-}
-
-/**
- * Effet magnétique : les éléments .magnetic suivent légèrement le curseur au survol.
- */
-function initMagnetic() {
-    if (prefersReducedMotion || window.matchMedia('(pointer: coarse)').matches) return;
-
-    document.querySelectorAll('.magnetic').forEach((el) => {
-        const strength = 0.35;
-
-        el.addEventListener('mousemove', (e) => {
-            const rect = el.getBoundingClientRect();
-            const x = e.clientX - rect.left - rect.width / 2;
-            const y = e.clientY - rect.top - rect.height / 2;
-            el.style.transform = `translate(${x * strength}px, ${y * strength}px)`;
-        });
-
-        el.addEventListener('mouseleave', () => {
-            el.style.transform = 'translate(0, 0)';
-        });
-    });
-}
-
-/**
- * Curseur personnalisé desktop : un anneau qui suit la souris et s'agrandit sur les éléments interactifs.
- */
-function initCustomCursor() {
-    if (prefersReducedMotion || window.matchMedia('(pointer: coarse)').matches) return;
-
-    const cursor = document.querySelector('[data-cursor]');
-    if (!cursor) return;
-
-    document.documentElement.classList.add('has-custom-cursor');
-
-    let mouseX = -100;
-    let mouseY = -100;
-    let ringX = -100;
-    let ringY = -100;
-
-    window.addEventListener('mousemove', (e) => {
-        mouseX = e.clientX;
-        mouseY = e.clientY;
-    });
-
-    const tick = () => {
-        ringX += (mouseX - ringX) * 0.18;
-        ringY += (mouseY - ringY) * 0.18;
-        cursor.style.transform = `translate(${ringX}px, ${ringY}px)`;
-        requestAnimationFrame(tick);
-    };
-    requestAnimationFrame(tick);
-
-    document.querySelectorAll('a, button, .magnetic, input, textarea, select').forEach((el) => {
-        el.addEventListener('mouseenter', () => cursor.classList.add('is-active'));
-        el.addEventListener('mouseleave', () => cursor.classList.remove('is-active'));
     });
 }
