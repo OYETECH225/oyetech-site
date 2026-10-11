@@ -21,6 +21,7 @@ class JuridiqueTest extends TestCase
             ->assertSee('contact@oyetech-ci.com')
             ->assertSee('Hébergeur')
             ->assertSee('Propriété intellectuelle')
+            ->assertSee('Activité principale')
             ->assertSee('[À FOURNIR]');
     }
 

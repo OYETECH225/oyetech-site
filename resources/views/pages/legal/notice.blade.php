@@ -22,6 +22,7 @@
             <li><strong>Forme juridique :</strong> <x-legal-value :value="$entreprise->get('forme_juridique')" /></li>
             <li><strong>Capital social :</strong> <x-legal-value :value="$entreprise->get('capital')" /></li>
             <li><strong>RCCM :</strong> <x-legal-value :value="$entreprise->get('rccm')" /></li>
+            <li><strong>Activité principale :</strong> <x-legal-value :value="$entreprise->get('activite')" /></li>
             <li><strong>Siège social :</strong> <x-legal-value :value="$entreprise->get('adresse.rue')" />, {{ $entreprise->get('adresse.ville') }}, {{ $entreprise->get('adresse.pays') }}</li>
             <li><strong>Téléphone :</strong>
                 @if($entreprise->telephone())

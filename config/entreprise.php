@@ -25,6 +25,7 @@ return [
     'forme_juridique' => 'Société à responsabilité limitée (SARL)',
     'rccm' => 'CI-ABJ-03-2025-B12-05166',
     'capital' => '1 000 000 FCFA',
+    'activite' => 'Prestations de services', // activité principale déclarée au RCCM
 
     'url' => 'https://www.oyetech-ci.com',
 
