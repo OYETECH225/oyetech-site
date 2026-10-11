@@ -23,8 +23,8 @@ return [
     'nom' => 'OYETECH',
     'raison_sociale' => 'OYETECH SARL',
     'forme_juridique' => 'Société à responsabilité limitée (SARL)',
-    'rccm' => '',
-    'capital' => '', // ex. « 1 000 000 FCFA »
+    'rccm' => 'CI-ABJ-03-2025-B12-05166',
+    'capital' => '1 000 000 FCFA',
 
     'url' => 'https://www.oyetech-ci.com',
 
@@ -53,9 +53,9 @@ return [
     ],
 
     'hebergeur' => [
-        'nom' => '',
-        'adresse' => '',
-        'site' => '',
+        'nom' => 'OVH SAS',
+        'adresse' => '2 rue Kellermann, 59100 Roubaix, France',
+        'site' => 'https://www.ovhcloud.com',
     ],
 
     // URL complète du profil ; vide = réseau non affiché
