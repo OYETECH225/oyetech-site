@@ -16,11 +16,13 @@
     @apply bg-paper text-ink antialiased;
   }
 
-  /* P1 — focus visible toujours net, même avec le curseur personnalisé */
+  /* P1 — focus visible toujours net, même avec le curseur personnalisé.
+     Anneau bicolore (liseré blanc + contour noir) : lisible sur fond clair comme
+     sombre, y compris sur les boutons noirs à texte blanc. */
   :focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 3px;
-    border-radius: 2px;
+    outline: 2px solid theme('colors.ink');
+    outline-offset: 2px;
+    box-shadow: 0 0 0 2px #fff;
   }
 }
 
