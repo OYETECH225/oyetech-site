@@ -143,6 +143,7 @@ class CredibiliteTest extends TestCase
 
     public function test_filtres_realisations_seulement_pour_les_poles_presents(): void
     {
+        \App\Models\Project::query()->delete(); // ignore les fiches insérées par les migrations de données
         \App\Models\Project::factory()->create(['pole' => 'solutions']);
 
         $this->get(route('home'))->assertDontSee('Filtrer les réalisations par pôle');

@@ -21,6 +21,17 @@ class ProjectSeeder extends Seeder
                 'results' => 'Projet livré, résultats en cours de mesure.',
                 'is_featured' => true,
             ],
+            [
+                'title' => 'Digitalisation de la gestion locative pour une agence immobilière',
+                'slug' => 'digitalisation-gestion-locative-agence-immobiliere',
+                'pole' => 'ilepay',
+                'client' => 'Agence de gestion immobilière',
+                'sector' => 'Immobilier',
+                'challenge' => 'L\'agence devait centraliser le suivi de ses contrats de location et sécuriser l\'encaissement des loyers auprès de plusieurs dizaines de propriétaires et locataires.',
+                'solution' => 'Déploiement d\'Ilepay pour la gestion des contrats de location, l\'encaissement digital des loyers et le suivi en temps réel des paiements pour chaque bien.',
+                'results' => '',
+                'is_featured' => true,
+            ],
         ];
 
         foreach ($projects as $project) {
