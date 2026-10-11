@@ -2,8 +2,8 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'À propos — OYETECH',
-        'Vision, mission, valeurs et gouvernance d\'OYETECH, cabinet stratégique et acteur technologique basé à Abidjan, intervenant en Afrique.'
+        'À propos d\'OYETECH, agence digitale à Abidjan depuis '.$entreprise->anneeCreation(),
+        'Vision, mission, valeurs et gouvernance d\'OYETECH, cabinet stratégique et acteur technologique basé à Abidjan depuis '.$entreprise->anneeCreation().', intervenant en Afrique.'
     );
 @endphp
 

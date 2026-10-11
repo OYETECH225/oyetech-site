@@ -2,12 +2,14 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'Réalisations — OYETECH',
-        'Découvrez les projets et études de cas menés par OYETECH pour ses clients en Afrique, avec des résultats chiffrés.'
+        'Réalisations et études de cas clients — OYETECH',
+        'Projets et études de cas menés par OYETECH, agence digitale à Abidjan, pour ses clients en Afrique.'
     );
 @endphp
 
 @section('content')
+
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Réalisations' => route('portfolio.index')]" />
 
 <x-hero eyebrow="Réalisations" title="Des résultats concrets pour nos clients"
     subtitle="Découvrez nos études de cas et les résultats chiffrés obtenus pour nos clients à travers nos cinq pôles d'expertise." />

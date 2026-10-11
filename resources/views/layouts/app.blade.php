@@ -16,6 +16,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     {!! \Artesaos\SEOTools\Facades\SEOTools::generate() !!}
+    <x-json-ld :data="$entreprise->jsonLd()" />
 
     @php
         $trackers = (object) array_filter([

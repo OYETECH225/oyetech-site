@@ -2,8 +2,8 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'OYETECH — Agence digitale & cabinet stratégique à Abidjan',
-        'OYETECH accompagne entreprises et institutions en Afrique avec des solutions de conseil, communication, marketing digital et technologie.'
+        'OYETECH — Agence digitale et cabinet stratégique à Abidjan',
+        'Agence digitale et cabinet stratégique à Abidjan : conseil, communication, marketing digital et solutions numériques pour faire grandir les entreprises africaines.'
     );
 @endphp
 

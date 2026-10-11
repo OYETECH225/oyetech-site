@@ -3,11 +3,14 @@
 @php
     app(\App\Services\SeoService::class)->set(
         $project->title.' — OYETECH',
-        $project->challenge
+        \Illuminate\Support\Str::limit((string) $project->challenge, 160),
+        $project->cover_url
     );
 @endphp
 
 @section('content')
+
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Réalisations' => route('portfolio.index'), $project->title => route('portfolio.show', $project)]" />
 
 <x-hero eyebrow="{{ ucfirst($project->pole) }} — {{ $project->client }}" :title="$project->title" />
 

@@ -2,12 +2,14 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'Nos pôles d\'expertise — OYETECH',
-        'Découvrez les cinq pôles d\'expertise d\'OYETECH : conseil & stratégie, communication, marketing digital, solutions numériques et Ilepay.'
+        'Nos pôles d\'expertise : conseil, communication, digital — OYETECH',
+        'Les cinq pôles d\'expertise d\'OYETECH à Abidjan : conseil & stratégie, communication & publicité, marketing digital, solutions numériques et Ilepay.'
     );
 @endphp
 
 @section('content')
+
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Services' => route('services.index')]" />
 
 <x-hero eyebrow="Nos services" title="Cinq pôles, une seule ambition"
     subtitle="Une expertise complète pour accompagner chaque étape de votre transformation digitale." />

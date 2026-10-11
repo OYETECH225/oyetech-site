@@ -1,3 +1,5 @@
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Services' => route('services.index'), $service->name => $service->url]" />
+
 <x-hero :eyebrow="'Pôle 0'.$service->order.'/05'" :title="$service->name" :subtitle="$service->summary" />
 
 <section class="bg-white py-24">

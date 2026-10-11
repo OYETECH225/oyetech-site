@@ -2,8 +2,8 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'Contact — OYETECH',
-        'Contactez OYETECH pour démarrer votre projet de conseil, communication, marketing digital ou solutions numériques à Abidjan.'
+        'Contact — Démarrer un projet avec OYETECH à Abidjan',
+        'Contactez OYETECH pour démarrer votre projet de conseil, communication, marketing digital ou solutions numériques à Abidjan. Réponse sous 48h.'
     );
 @endphp
 

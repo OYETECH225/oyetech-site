@@ -2,12 +2,14 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'Ilepay — Simplifier les paiements, au quotidien | OYETECH',
+        'Ilepay — Paiement de loyer en ligne en Côte d\'Ivoire | OYETECH',
         $service->summary
     );
 @endphp
 
 @section('content')
+
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Services' => route('services.index'), $service->name => $service->url]" />
 
 <section class="sunburst-bg grain relative overflow-hidden bg-ink pt-40 pb-24 text-white" data-reveal-group>
     <div class="relative mx-auto max-w-4xl px-6 text-center">

@@ -10,13 +10,22 @@
         $article->cover_url
     );
 
-    \Artesaos\SEOTools\Facades\JsonLd::setType('Article');
-    \Artesaos\SEOTools\Facades\JsonLd::addValue('headline', $article->title);
-    \Artesaos\SEOTools\Facades\JsonLd::addValue('datePublished', $article->published_at?->toIso8601String());
-    \Artesaos\SEOTools\Facades\JsonLd::addValue('articleSection', $article->category);
+    $organization = ['@type' => 'Organization', '@id' => rtrim($entreprise->get('url'), '/').'/#organization', 'name' => $entreprise->get('nom')];
+
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->setType('Article');
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('headline', $article->title);
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('datePublished', $article->published_at?->toIso8601String());
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('dateModified', ($article->updated_at ?? $article->published_at)?->toIso8601String());
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('articleSection', $article->category);
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('mainEntityOfPage', route('blog.show', $article));
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('author', $organization);
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->addValue('publisher', $organization + ['logo' => ['@type' => 'ImageObject', 'url' => asset('images/logo-full.png')]]);
+    \Artesaos\SEOTools\Facades\SEOTools::jsonLdMulti()->setImages([$article->cover_url ?? asset(\App\Services\SeoService::DEFAULT_IMAGE)]);
 @endphp
 
 @section('content')
+
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Insights' => route('blog.index'), $article->title => route('blog.show', $article)]" />
 
 {{-- Barre de progression de lecture --}}
 <div class="fixed left-0 top-0 z-[60] h-1 w-full bg-ink/10" aria-hidden="true">

@@ -33,3 +33,16 @@
         </div>
     @endforeach
 </div>
+
+{{-- JSON-LD FAQPage généré à partir des mêmes données que la FAQ affichée --}}
+@if($items)
+    <x-json-ld :data="[
+        '@context' => 'https://schema.org',
+        '@type' => 'FAQPage',
+        'mainEntity' => array_map(fn ($item) => [
+            '@type' => 'Question',
+            'name' => $item['q'],
+            'acceptedAnswer' => ['@type' => 'Answer', 'text' => $item['a']],
+        ], $items),
+    ]" />
+@endif

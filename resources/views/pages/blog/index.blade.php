@@ -2,12 +2,14 @@
 
 @php
     app(\App\Services\SeoService::class)->set(
-        'Insights — OYETECH',
-        'Articles stratégiques d\'OYETECH sur l\'innovation digitale, la fintech, le marketing et la stratégie en Afrique de l\'Ouest.'
+        'Insights : stratégie, digital et fintech en Afrique — OYETECH',
+        'Articles d\'OYETECH sur la stratégie, l\'innovation digitale, la fintech et le marketing en Afrique de l\'Ouest.'
     );
 @endphp
 
 @section('content')
+
+<x-breadcrumb-schema :items="['Accueil' => route('home'), 'Insights' => route('blog.index')]" />
 
 <x-hero eyebrow="Insights" title="Nos réflexions sur la transformation digitale"
     subtitle="Innovation, fintech, marketing et stratégie : nos experts partagent leur regard sur les enjeux digitaux en Afrique de l'Ouest." />
