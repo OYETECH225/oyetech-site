@@ -84,18 +84,7 @@
 
         <div class="mt-14 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
             @foreach($team as $member)
-                <div class="rounded-2xl bg-white p-6 text-center shadow-sm" data-aos="fade-up">
-                    @if($member->photo_url)
-                        <img src="{{ $member->photo_url }}" alt="{{ $member->display_name }}" width="96" height="96" loading="lazy" class="mx-auto h-24 w-24 rounded-full object-cover">
-                    @else
-                        <div class="mx-auto h-24 w-24 rounded-full bg-ink/5"></div>
-                    @endif
-                    <h3 class="mt-4 font-bold text-ink">{{ $member->display_name }}</h3>
-                    <p class="text-sm text-ink/60">{{ $member->role }}</p>
-                    @if($member->bio)
-                        <p class="mt-2 text-sm text-ink/60">{{ $member->bio }}</p>
-                    @endif
-                </div>
+                <x-team-card :member="$member" :bio="true" data-aos="fade-up" />
             @endforeach
         </div>
     </div>

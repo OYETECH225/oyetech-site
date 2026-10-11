@@ -36,7 +36,8 @@ class TestimonialResource extends Resource
                         ->label('Nom')
                         ->required(),
                     Forms\Components\TextInput::make('author_role')
-                        ->label('Poste / Fonction'),
+                        ->label('Poste / Fonction')
+                        ->required(),
                     Forms\Components\TextInput::make('company')
                         ->label('Entreprise')
                         ->required(),
@@ -62,6 +63,11 @@ class TestimonialResource extends Resource
                     Forms\Components\Toggle::make('is_active')
                         ->label('Visible')
                         ->default(true)
+                        ->inline(false),
+                    Forms\Components\Toggle::make('publication_authorized')
+                        ->label('Autorisation de publication obtenue')
+                        ->helperText('Obligatoire pour l\'affichage : accord écrit de l\'auteur (nom, fonction, entreprise, citation).')
+                        ->default(false)
                         ->inline(false),
                 ])
                 ->columns(2),
@@ -91,6 +97,9 @@ class TestimonialResource extends Resource
                     ->sortable(),
                 Tables\Columns\IconColumn::make('is_active')
                     ->label('Visible')
+                    ->boolean(),
+                Tables\Columns\IconColumn::make('publication_authorized')
+                    ->label('Autorisé')
                     ->boolean(),
             ])
             ->defaultSort('order')

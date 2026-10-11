@@ -168,17 +168,14 @@
 {{-- ============================================================
      CLIENTS — logos en marquee sur fond sombre
      ============================================================ --}}
-@php $clients = \App\Models\Client::active()->get(); @endphp
-@if($clients->isNotEmpty())
+{{-- Seulement des logos réels ; section masquée sous 2 logos (voir HomeController) --}}
+@if($clients->count() >= 2)
 <div class="relative border-y border-white/5 bg-navy-light py-10">
-    <p class="mb-5 text-center text-xs font-semibold uppercase tracking-widest text-white/25">Ils nous font confiance</p>
+    <p class="mb-5 text-center text-xs font-semibold uppercase tracking-widest text-white/60">Ils nous font confiance</p>
     <x-marquee>
         @foreach($clients as $client)
-            @if($client->logo_url)
-                <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" class="mx-10 inline-flex h-10 w-auto object-contain opacity-40 grayscale transition hover:opacity-80 hover:grayscale-0">
-            @else
-                <span class="mx-10 inline-flex h-10 items-center font-bold text-white/20 transition-colors hover:text-white/50">{{ $client->name }}</span>
-            @endif
+            <img src="{{ $client->logo_url }}" alt="{{ $client->name }}" width="160" height="40" loading="lazy"
+                class="mx-10 inline-flex h-10 w-auto object-contain opacity-40 grayscale transition hover:opacity-80 hover:grayscale-0">
         @endforeach
     </x-marquee>
     <x-wave-divider fill="#ffffff" :height="56" />
@@ -438,58 +435,7 @@
 {{-- ============================================================
      TÉMOIGNAGES — fond blanc
      ============================================================ --}}
-@if($testimonials->isNotEmpty())
-<section class="relative overflow-hidden bg-white py-28" x-data="{ active: 0, total: {{ $testimonials->count() }} }">
-    <div class="relative mx-auto max-w-3xl px-6 text-center">
-        <span class="section-badge mb-6 inline-flex" data-reveal>Témoignages clients</span>
-        <h2 class="section-title mb-8" data-reveal>Ce que disent <span class="gradient-text">nos clients</span></h2>
-
-        <span class="font-display select-none text-8xl leading-none text-ink/15" aria-hidden="true">&ldquo;</span>
-
-        <div class="relative min-h-[240px]" aria-live="polite" data-reveal>
-            @foreach($testimonials as $i => $testimonial)
-                <div x-show="active === {{ $i }}" x-transition>
-                    <div class="mb-5 flex justify-center gap-1" aria-label="{{ $testimonial->rating }} étoiles sur 5">
-                        @for($s = 1; $s <= 5; $s++)
-                            <svg class="h-5 w-5 {{ $s <= $testimonial->rating ? 'text-ink' : 'text-ink/15' }}" fill="currentColor" viewBox="0 0 20 20" aria-hidden="true">
-                                <path d="M9.049 2.927c.3-.921 1.603-.921 1.902 0l1.286 3.957a1 1 0 00.95.69h4.162c.969 0 1.371 1.24.588 1.81l-3.367 2.446a1 1 0 00-.364 1.118l1.287 3.957c.299.921-.755 1.688-1.539 1.118l-3.367-2.446a1 1 0 00-1.176 0l-3.367 2.446c-.784.57-1.838-.197-1.539-1.118l1.287-3.957a1 1 0 00-.364-1.118L2.063 9.384c-.783-.57-.38-1.81.588-1.81h4.162a1 1 0 00.95-.69l1.286-3.957z"/>
-                            </svg>
-                        @endfor
-                    </div>
-                    <p class="font-display text-xl font-medium leading-relaxed text-ink/80 sm:text-2xl">
-                        &ldquo;{{ $testimonial->content }}&rdquo;
-                    </p>
-                    <div class="mt-8 flex items-center justify-center gap-4">
-                        @if($testimonial->photo_url)
-                            <img src="{{ $testimonial->photo_url }}" alt="{{ $testimonial->author_name }}" width="52" height="52" loading="lazy"
-                                class="h-12 w-12 rounded-full object-cover ring-2 ring-ink/15">
-                        @else
-                            <span class="flex h-12 w-12 items-center justify-center rounded-full bg-ink ring-2 ring-ink/10 font-display text-lg font-bold text-white">
-                                {{ mb_substr($testimonial->author_name, 0, 1) }}
-                            </span>
-                        @endif
-                        <div class="text-left">
-                            <p class="font-display font-bold text-ink">{{ $testimonial->author_name }}</p>
-                            <p class="text-sm text-ink/45">{{ $testimonial->author_role }}, {{ $testimonial->company }}</p>
-                        </div>
-                    </div>
-                </div>
-            @endforeach
-        </div>
-
-        <div class="mt-10 flex justify-center gap-2">
-            @foreach($testimonials as $i => $testimonial)
-                <button @click="active = {{ $i }}"
-                    :aria-current="active === {{ $i }}"
-                    aria-label="Témoignage {{ $i + 1 }} sur {{ $testimonials->count() }}"
-                    :class="active === {{ $i }} ? 'bg-ink w-8' : 'bg-ink/15 w-2.5 hover:bg-ink/25'"
-                    class="h-2.5 rounded-full transition-all duration-300">
-                </button>
-            @endforeach
-        </div>
-    </div>
-</section>
-@endif
+<x-testimonials :testimonials="$testimonials" />
 
 {{-- ============================================================
      ÉQUIPE
@@ -505,18 +451,7 @@
 
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
             @foreach($team as $member)
-                <div data-reveal class="group rounded-2xl border border-ink/8 bg-white p-6 text-center shadow-sm transition duration-300 hover:-translate-y-2 hover:border-ink/20 hover:shadow-xl hover:shadow-black/5">
-                    @if($member->photo_url)
-                        <img src="{{ $member->photo_url }}" alt="{{ $member->display_name }}" width="96" height="96" loading="lazy"
-                            class="mx-auto h-24 w-24 rounded-full object-cover ring-4 ring-ink/5 transition group-hover:ring-ink/15">
-                    @else
-                        <div class="mx-auto flex h-24 w-24 items-center justify-center rounded-full bg-ink">
-                            <span class="font-display text-2xl font-extrabold text-white/80">{{ $member->initials }}</span>
-                        </div>
-                    @endif
-                    <h3 class="mt-4 font-display font-bold text-ink">{{ $member->display_name }}</h3>
-                    <p class="text-sm font-medium text-ink/50">{{ $member->role }}</p>
-                </div>
+                <x-team-card :member="$member" data-reveal />
             @endforeach
         </div>
 

@@ -9,11 +9,9 @@ class TeamMemberSeeder extends Seeder
 {
     public function run(): void
     {
+        // Membres réels uniquement (photo et LinkedIn à compléter dans l'admin).
         $members = [
-            ['name' => 'Kouamé Oyetech', 'role' => 'Fondateur & CEO', 'bio' => 'Plus de 15 ans d\'expérience en stratégie digitale en Afrique de l\'Ouest.', 'order' => 1],
-            ['name' => 'Aminata Sylla', 'role' => 'Directrice Conseil & Stratégie', 'bio' => 'Experte en transformation organisationnelle et gouvernance digitale.', 'order' => 2],
-            ['name' => 'David Traoré', 'role' => 'Directeur Technique', 'bio' => 'Architecte logiciel, pilote l\'ensemble des solutions numériques d\'OYETECH.', 'order' => 3],
-            ['name' => 'Marie-Claire N\'Guessan', 'role' => 'Directrice Communication', 'bio' => 'Spécialiste de la stratégie de marque et des campagnes 360°.', 'order' => 4],
+            ['name' => 'Yamoussa KOUYATE', 'role' => 'Fondateur & DG', 'order' => 1],
         ];
 
         foreach ($members as $member) {

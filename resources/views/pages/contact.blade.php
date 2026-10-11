@@ -16,13 +16,19 @@
     <div class="mx-auto grid max-w-7xl gap-16 px-6 lg:grid-cols-2">
         <div data-aos="fade-up">
             @if(session('success'))
-                <div class="mb-6 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-700">
+                <div class="mb-6 rounded-lg bg-green-50 px-4 py-3 text-sm font-medium text-green-800" role="status">
                     {{ session('success') }}
                 </div>
                 <script>
                     window.dataLayer = window.dataLayer || [];
                     window.dataLayer.push({ event: 'generate_lead', form_name: 'contact' });
                 </script>
+            @endif
+
+            @if($errors->any())
+                <div class="mb-6 rounded-lg bg-red-50 px-4 py-3 text-sm font-medium text-red-800" role="alert">
+                    Votre message n'a pas pu être envoyé : merci de corriger les champs signalés ci-dessous.
+                </div>
             @endif
 
             <form action="{{ route('contact.store') }}" method="POST" class="space-y-4"
@@ -37,55 +43,61 @@
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="text-sm font-medium text-ink">Nom complet *</label>
-                        <input type="text" name="name" value="{{ old('name') }}" required class="mt-1 w-full rounded-md border-ink/20">
-                        @error('name') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                        <label for="contact-name" class="text-sm font-medium text-ink">Nom complet *</label>
+                        <input type="text" id="contact-name" name="name" value="{{ old('name') }}" required autocomplete="name" class="mt-1 w-full rounded-md border-ink/20" @error('name') aria-invalid="true" aria-describedby="contact-name-error" @enderror>
+                        @error('name') <p id="contact-name-error" class="mt-1 text-xs text-red-700">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="text-sm font-medium text-ink">Entreprise</label>
-                        <input type="text" name="company" value="{{ old('company') }}" class="mt-1 w-full rounded-md border-ink/20">
-                    </div>
-                </div>
-
-                <div class="grid gap-4 sm:grid-cols-2">
-                    <div>
-                        <label class="text-sm font-medium text-ink">Email *</label>
-                        <input type="email" name="email" value="{{ old('email') }}" required class="mt-1 w-full rounded-md border-ink/20">
-                        @error('email') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
-                    </div>
-                    <div>
-                        <label class="text-sm font-medium text-ink">Téléphone</label>
-                        <input type="text" name="phone" value="{{ old('phone') }}" class="mt-1 w-full rounded-md border-ink/20">
+                        <label for="contact-company" class="text-sm font-medium text-ink">Entreprise</label>
+                        <input type="text" id="contact-company" name="company" value="{{ old('company') }}" autocomplete="organization" class="mt-1 w-full rounded-md border-ink/20">
                     </div>
                 </div>
 
                 <div class="grid gap-4 sm:grid-cols-2">
                     <div>
-                        <label class="text-sm font-medium text-ink">Pays</label>
-                        <input type="text" name="country" value="{{ old('country') }}" class="mt-1 w-full rounded-md border-ink/20">
+                        <label for="contact-email" class="text-sm font-medium text-ink">Email *</label>
+                        <input type="email" id="contact-email" name="email" value="{{ old('email') }}" required autocomplete="email" class="mt-1 w-full rounded-md border-ink/20" @error('email') aria-invalid="true" aria-describedby="contact-email-error" @enderror>
+                        @error('email') <p id="contact-email-error" class="mt-1 text-xs text-red-700">{{ $message }}</p> @enderror
                     </div>
                     <div>
-                        <label class="text-sm font-medium text-ink">Pôle concerné</label>
-                        <select name="pole" class="mt-1 w-full rounded-md border-ink/20">
+                        <label for="contact-phone" class="text-sm font-medium text-ink">Téléphone</label>
+                        <input type="tel" id="contact-phone" name="phone" value="{{ old('phone') }}" autocomplete="tel" maxlength="20" class="mt-1 w-full rounded-md border-ink/20">
+                        @error('phone') <p class="mt-1 text-xs text-red-700">{{ $message }}</p> @enderror
+                    </div>
+                </div>
+
+                <div class="grid gap-4 sm:grid-cols-2">
+                    <div>
+                        <label for="contact-country" class="text-sm font-medium text-ink">Pays</label>
+                        <input type="text" id="contact-country" name="country" value="{{ old('country') }}" autocomplete="country-name" class="mt-1 w-full rounded-md border-ink/20">
+                    </div>
+                    <div>
+                        <label for="contact-pole" class="text-sm font-medium text-ink">Pôle concerné</label>
+                        <select id="contact-pole" name="pole" class="mt-1 w-full rounded-md border-ink/20">
                             <option value="">Sélectionner</option>
-                            <option value="conseil">Conseil & Stratégie</option>
-                            <option value="communication">Communication & Publicité</option>
-                            <option value="marketing">Marketing Digital</option>
-                            <option value="solutions">Solutions Numériques</option>
-                            <option value="ilepay">Ilepay</option>
+                            @foreach($poles as $value => $label)
+                                <option value="{{ $value }}" @selected(old('pole', $selectedPole) === $value)>{{ $label }}</option>
+                            @endforeach
                         </select>
+                        @error('pole') <p class="mt-1 text-xs text-red-700">{{ $message }}</p> @enderror
                     </div>
                 </div>
 
                 <div>
-                    <label class="text-sm font-medium text-ink">Budget estimé</label>
-                    <input type="text" name="budget" value="{{ old('budget') }}" class="mt-1 w-full rounded-md border-ink/20">
+                    <label for="contact-budget" class="text-sm font-medium text-ink">Budget estimé</label>
+                    <select id="contact-budget" name="budget" class="mt-1 w-full rounded-md border-ink/20">
+                        <option value="">Sélectionner</option>
+                        @foreach($budgets as $budget)
+                            <option value="{{ $budget }}" @selected(old('budget') === $budget)>{{ $budget }}</option>
+                        @endforeach
+                    </select>
+                    @error('budget') <p class="mt-1 text-xs text-red-700">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
-                    <label class="text-sm font-medium text-ink">Message *</label>
-                    <textarea name="message" rows="5" required minlength="20" class="mt-1 w-full rounded-md border-ink/20">{{ old('message') }}</textarea>
-                    @error('message') <p class="mt-1 text-xs text-red-600">{{ $message }}</p> @enderror
+                    <label for="contact-message" class="text-sm font-medium text-ink">Message *</label>
+                    <textarea id="contact-message" name="message" rows="5" required minlength="20" class="mt-1 w-full rounded-md border-ink/20" @error('message') aria-invalid="true" aria-describedby="contact-message-error" @enderror>{{ old('message', $defaultMessage) }}</textarea>
+                    @error('message') <p id="contact-message-error" class="mt-1 text-xs text-red-700">{{ $message }}</p> @enderror
                 </div>
 
                 <button type="submit" class="btn-dark w-full">Envoyer ma demande</button>

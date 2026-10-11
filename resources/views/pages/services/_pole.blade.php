@@ -36,6 +36,9 @@
 </section>
 @endif
 
+{{-- Contenu propre à un pôle (ex. technologies et offres de Solutions Numériques) --}}
+@yield('pole_details')
+
 @if($projects->isNotEmpty())
 <section class="bg-white py-28">
     <div class="mx-auto max-w-7xl px-6">
