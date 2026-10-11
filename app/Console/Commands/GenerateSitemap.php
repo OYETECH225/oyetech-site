@@ -27,7 +27,9 @@ class GenerateSitemap extends Command
             ->add(Url::create(route('services.ilepay'))->setPriority(0.8))
             ->add(Url::create(route('portfolio.index'))->setPriority(0.7))
             ->add(Url::create(route('blog.index'))->setPriority(0.7))
-            ->add(Url::create(route('contact'))->setPriority(0.6));
+            ->add(Url::create(route('contact'))->setPriority(0.6))
+            ->add(Url::create(route('legal.notice'))->setPriority(0.2))
+            ->add(Url::create(route('legal.privacy'))->setPriority(0.2));
 
         Project::all()->each(function (Project $project) use ($sitemap) {
             $sitemap->add(

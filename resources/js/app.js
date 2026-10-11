@@ -4,6 +4,7 @@ import AOS from 'aos';
 import 'aos/dist/aos.css';
 import { gsap } from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import { cookieConsent } from './consent';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -41,6 +42,8 @@ Alpine.data('countUp', (target) => ({
         });
     },
 }));
+
+Alpine.data('cookieConsent', cookieConsent);
 
 Alpine.start();
 

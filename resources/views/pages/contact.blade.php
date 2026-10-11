@@ -89,6 +89,11 @@
                 </div>
 
                 <button type="submit" class="btn-dark w-full">Envoyer ma demande</button>
+
+                <p class="text-xs leading-relaxed text-ink/60">
+                    Vos données sont utilisées uniquement pour répondre à votre demande.
+                    En savoir plus : <a href="{{ route('legal.privacy') }}" class="font-semibold text-ink underline underline-offset-2 hover:no-underline">politique de confidentialité</a>.
+                </p>
             </form>
         </div>
 

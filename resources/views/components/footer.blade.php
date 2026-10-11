@@ -72,9 +72,13 @@
             </div>
         </div>
 
-        <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/35 sm:flex-row">
+        <div class="mt-12 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 text-xs text-white/55 sm:flex-row">
             <p>&copy; {{ now()->year }} {{ $entreprise->get('raison_sociale') }}. Tous droits réservés.</p>
-            <p>Conçu et développé par OYETECH — Abidjan, Côte d'Ivoire</p>
+            <ul class="flex flex-wrap items-center justify-center gap-x-5 gap-y-2">
+                <li><a href="{{ route('legal.notice') }}" class="transition hover:text-white">Mentions légales</a></li>
+                <li><a href="{{ route('legal.privacy') }}" class="transition hover:text-white">Politique de confidentialité</a></li>
+                <li><button type="button" x-data @click="$dispatch('open-cookie-banner')" class="transition hover:text-white">Gérer les cookies</button></li>
+            </ul>
         </div>
     </div>
 </footer>

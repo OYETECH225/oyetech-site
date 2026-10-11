@@ -13,4 +13,14 @@ class PageController extends Controller
             'team' => TeamMember::active()->get(),
         ]);
     }
+
+    public function legalNotice(): View
+    {
+        return view('pages.legal.notice');
+    }
+
+    public function privacy(): View
+    {
+        return view('pages.legal.privacy');
+    }
 }

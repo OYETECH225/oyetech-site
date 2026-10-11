@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [HomeController::class, 'index'])->name('home');
 Route::get('/a-propos', [PageController::class, 'about'])->name('about');
+Route::get('/mentions-legales', [PageController::class, 'legalNotice'])->name('legal.notice');
+Route::get('/politique-de-confidentialite', [PageController::class, 'privacy'])->name('legal.privacy');
 
 Route::prefix('services')->name('services.')->group(function () {
     Route::get('/', [ServiceController::class, 'index'])->name('index');

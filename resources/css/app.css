@@ -7,6 +7,11 @@
     scroll-behavior: smooth;
   }
 
+  /* Éléments Alpine masqués jusqu'à l'initialisation (menu mobile, bandeau cookies…) */
+  [x-cloak] {
+    display: none !important;
+  }
+
   body {
     @apply bg-paper text-ink antialiased;
   }
