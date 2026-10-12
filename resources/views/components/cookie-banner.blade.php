@@ -11,7 +11,7 @@
         Avec votre accord, nous utilisons des traceurs de mesure d'audience et de publicité (Google, et le cas échéant Meta et LinkedIn)
         pour comprendre l'utilisation du site et améliorer nos services. Vous pouvez refuser : le site fonctionne normalement.
         Vous pourrez changer d'avis à tout moment via « Gérer les cookies » en bas de page.
-        <a href="{{ route('legal.privacy') }}#cookies" class="font-semibold text-ink underline underline-offset-2 hover:no-underline">En savoir plus</a>
+        <a href="{{ route('legal.privacy') }}#cookies" class="font-semibold text-ink underline underline-offset-2 hover:no-underline">En savoir plus sur les cookies</a>
     </p>
     <div class="mt-5 grid gap-3 sm:grid-cols-2">
         <button type="button" @click="refuse()" class="btn-dark w-full">Refuser</button>

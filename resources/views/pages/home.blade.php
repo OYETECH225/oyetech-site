@@ -27,7 +27,8 @@
 {{-- ============================================================
      HERO — fond noir + grille de points
      ============================================================ --}}
-<section class="relative flex min-h-screen items-center overflow-hidden bg-navy text-white" data-reveal-group>
+{{-- Hero : pas d'animation d'apparition (titre = élément LCP, affiché dès le premier rendu) --}}
+<section class="relative flex min-h-screen items-center overflow-hidden bg-navy text-white">
 
     {{-- Blobs morphants CSS --}}
     <div class="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden="true">
@@ -46,25 +47,25 @@
         <div class="grid items-center gap-14 lg:grid-cols-2 lg:gap-20">
 
             {{-- Contenu gauche --}}
-            <div data-reveal-group>
-                <span class="section-badge-light mb-6 inline-flex" data-reveal>
+            <div>
+                <span class="section-badge-light mb-6 inline-flex">
                     <span class="mr-2 h-1.5 w-1.5 rounded-full bg-white/60"></span>
                     {{ $heroBadge }}
                 </span>
 
-                <h1 class="font-display text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl xl:text-[3.5rem]" data-reveal>
+                <h1 class="font-display text-4xl font-extrabold leading-[1.08] tracking-tight sm:text-5xl xl:text-[3.5rem]">
                     {{ $heroTitle }}
                 </h1>
 
-                <p class="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg" data-reveal>
+                <p class="mt-6 max-w-xl text-base leading-relaxed text-white/60 sm:text-lg">
                     {{ $heroSubtitle }}
                 </p>
 
-                <div class="mt-8 flex flex-wrap items-center gap-4" data-reveal>
+                <div class="mt-8 flex flex-wrap items-center gap-4">
                     <a href="{{ route('contact') }}" class="btn-invert">Démarrer un projet</a>
                 </div>
 
-                <div class="mt-10 flex flex-wrap gap-8 border-t border-white/10 pt-8" data-reveal>
+                <div class="mt-10 flex flex-wrap gap-8 border-t border-white/10 pt-8">
                     @foreach($heroStats as [$val, $label])
                         <div>
                             <p class="font-display text-3xl font-extrabold text-white">{{ $val }}</p>
@@ -76,7 +77,7 @@
 
             {{-- Panneau des pôles (droite) : uniquement du contenu réel, chaque ligne mène à la page du pôle --}}
             @if($services->isNotEmpty())
-            <nav class="relative hidden lg:block" aria-label="Nos pôles d'expertise" data-reveal>
+            <nav class="relative hidden lg:block" aria-label="Nos pôles d'expertise">
                 <div class="relative overflow-hidden rounded-3xl border border-white/10 bg-navy-light/80 p-6 shadow-2xl shadow-black/30 backdrop-blur-sm">
                     <p class="mb-4 text-xs font-semibold uppercase tracking-wider text-white/60">Nos {{ $services->count() }} pôles d'expertise</p>
                     <ul class="space-y-2">
@@ -235,7 +236,7 @@
             </ul>
 
             <div class="mt-10 flex flex-wrap gap-4" data-reveal>
-                <a href="{{ route('about') }}" class="btn-primary">En savoir plus</a>
+                <a href="{{ route('about') }}" class="btn-primary">Découvrir l'agence OYETECH</a>
                 <a href="{{ route('contact') }}" class="btn-outline-dark">Parlons de votre projet</a>
             </div>
         </div>

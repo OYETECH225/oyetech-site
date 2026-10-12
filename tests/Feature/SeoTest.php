@@ -169,7 +169,7 @@ class SeoTest extends TestCase
             ->assertHeader('Referrer-Policy', 'strict-origin-when-cross-origin')
             ->assertHeader('X-Frame-Options', 'SAMEORIGIN')
             ->assertHeader('Permissions-Policy')
-            ->assertHeader('Content-Security-Policy-Report-Only');
+            ->assertHeader('Content-Security-Policy');
 
         $this->get('https://localhost/')->assertHeader('Strict-Transport-Security');
     }

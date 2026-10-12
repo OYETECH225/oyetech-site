@@ -224,15 +224,6 @@
     transform: translateY(28px);
   }
 
-  [data-reveal-word] {
-    display: inline-block;
-  }
-
-  .js [data-reveal-word] {
-    opacity: 0;
-    transform: translateY(0.4em);
-  }
-
   /* Même principe pour AOS, dont la feuille de style masque [data-aos] sans condition */
   html:not(.js) [data-aos] {
     opacity: 1 !important;
@@ -240,8 +231,7 @@
   }
 
   @media (prefers-reduced-motion: reduce) {
-    [data-reveal],
-    [data-reveal-word] {
+    [data-reveal] {
       opacity: 1 !important;
       transform: none !important;
     }

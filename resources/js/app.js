@@ -52,7 +52,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     initMarquees();
     initRevealGroups();
-    initWordReveal();
     initParallax();
 });
 
@@ -103,31 +102,6 @@ function initRevealGroups() {
                 trigger: el,
                 start: 'top 88%',
             },
-        });
-    });
-}
-
-/**
- * Révèle un titre mot par mot. Markup attendu : conteneur [data-reveal-words] dont le texte
- * est découpé en <span data-reveal-word> côté Blade.
- */
-function initWordReveal() {
-    document.querySelectorAll('[data-reveal-words]').forEach((container) => {
-        const words = container.querySelectorAll('[data-reveal-word]');
-        if (!words.length) return;
-
-        if (prefersReducedMotion) {
-            words.forEach((w) => { w.style.opacity = 1; w.style.transform = 'none'; });
-            return;
-        }
-
-        gsap.to(words, {
-            opacity: 1,
-            y: 0,
-            duration: 0.9,
-            ease: 'power3.out',
-            stagger: 0.06,
-            delay: 0.2,
         });
     });
 }
